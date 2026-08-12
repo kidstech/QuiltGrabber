@@ -1,0 +1,27 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+
+public class QuiltGrabber {
+
+ public static void main( String args[]) {
+  BufferedImage bimg = null;
+  try {
+    bimg = ImageIO.read( new File("test.jpg"));
+      } catch( Exception e) {
+	e.printStackTrace();
+ 	}
+   System.out.println("Click the four corners of the DigiQuilt.");
+   System.out.println("Start at the top left, then work your way clockwise!");
+	
+   DQImagePanel dqip = new DQImagePanel(bimg);
+   JFrame myFrame = new JFrame("QuiltGrabber");
+   myFrame.setBounds(0,0,bimg.getWidth(), bimg.getHeight());
+   myFrame.add(dqip);
+   myFrame.setVisible(true);
+	
+	
+ }
+
+}
