@@ -3,6 +3,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPOutputStream;
+
 import javax.swing.*;
 
 public class DQImagePanelAbstract extends JPanel implements MouseListener, MouseMotionListener {
@@ -162,10 +171,43 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             corners[1][index] = e.getY();
             index = index+1;
             System.out.println("Selected point:" + corners[0][index-1] + "," + corners[1][index-1]);
+        
+            if (index ==4) {
+                System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
+
+                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber-Translated-Quilt", "Translated-Quilt-1");
+
+                Homography h = new Homography();
+
+                String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
+
+                String savePath = "./Translated-Quilt.xml.gz";
+                System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
+                try (FileOutputStream fileStream = new FileOutputStream(savePath);
+                    GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)) {
+
+                    byte[] xmlBytes = compiledXMLPayload.getBytes(StandardCharsets.UTF_8);
+                    // this line converts the string to bytes and compresses them
+
+                    gzipStream.write(xmlBytes);
+
+                    gzipStream.finish();
+
+                // // Instantly writes the exact byte footprint profile directly down to the hard drive path
+                // Files.write(Paths.get(savePath), compiledXMLPayload.getBytes(), 
+                //             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                
+                // System.out.println(" SUCCESS: DIGIQUILT XML SAVED!");
+                // System.out.println(" Location: " + savePath);
+
+                }catch (IOException ioException) {
+                System.err.println("ERROR: FAILED TO SAVE FILE");
+                ioException.printStackTrace();
+            }
+            }
         }
         repaint();
     }
-
     public void mouseEntered(MouseEvent e) {};
     public void mouseExited(MouseEvent e) {};
     public void mousePressed(MouseEvent e) {};
