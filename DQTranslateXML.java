@@ -1,5 +1,5 @@
+import Jama.Matrix;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,5 +67,125 @@ public class DQTranslateXML {
 
         Color triangleColor = new Color(image.getRGB(centerX,centerY));
         return findClosestColor(triangleColor);
+    }
+
+    //building the actual xml file for the quilt
+    public String buildQuiltXML (BufferedImage image, int[][] corners, Homography h) {
+        Matrix picPoints = new Matrix(4,2);
+        Matrix quiltPoints = new Matrix (4,2);
+        // initializing picture points as done in DQImagePanel
+
+        // top left
+        picPoints.set(0,0,corners[0][0]);
+        picPoints.set(0,1,corners[1][0]);
+
+        // top right
+        picPoints.set(1,0,corners[0][1]);
+        picPoints.set(1,1,corners[1][1]);
+
+        // bottom right
+        picPoints.set(2,0,corners[0][2]);
+        picPoints.set(2,1,corners[1][2]);
+
+        // bottom left
+        picPoints.set(3,0,corners[0][3]);
+        picPoints.set(3,1,corners[1][3]);
+
+        // initializing quilt points as done in DQImagePanel
+
+         // top left
+        quiltPoints.set(0,0,0);
+        quiltPoints.set(0,1,quiltSize);
+
+        // top right
+        quiltPoints.set(1,0,quiltSize);
+        quiltPoints.set(1,1,quiltSize);
+
+        // bottom right
+        quiltPoints.set(2,0,quiltSize);
+        quiltPoints.set(2,1,0);
+
+        // bottom left (origin)
+        quiltPoints.set(3,0,0);
+        quiltPoints.set(3,1,0);
+
+        h.findHomography(picPoints, quiltPoints);
+
+        StringBuilder buildPatches = new StringBuilder();
+
+        // these loops make steps by two, assuring that we are assigning a patch as
+        // a block of 16 triangles, like the xml is generated in DigiQuilt terms.
+        // For a 2x2 patch quilt, there are 4 blocks in each patch, so we must take 
+        // steps of 2 to properly represent the quilt.
+
+        for (int i = quiltSize - 2; i >= 0; i-=2) {
+            for (int j = 0; j < quiltSize; j+=2) {
+                buildPatches.append("        <Patch>\n");
+                // one patch per 4 blocks
+
+                // rows and columns WITHIN the patch itself
+                for (int row = 1; row >= 0; row--) {
+                    for (int col = 0; col < 2; col++) {
+                
+                        // internal patch rows & columns
+                        int targetRow = i + row;
+                        int targetCol = j + col;
+
+                        // initializing where the points are (similar to what is done in DQImagePanel)
+                        double[] topLeftCoords = h.reverseTranslatePoint(targetCol, targetRow + 1);
+                        double[] topRightCoords = h.reverseTranslatePoint(targetCol + 1, targetRow + 1);
+                        double[] bottomRightCoords = h.reverseTranslatePoint(targetCol + 1, targetRow);
+                        double[] bottomLeftCoords = h.reverseTranslatePoint(targetCol, targetRow);
+                        // added a central point to make identifying triangles easier
+                        double[] centerCoords = h.reverseTranslatePoint(targetCol + 0.5, targetRow + 0.5);
+
+                        Point topLeft = new Point(topLeftCoords[0], topLeftCoords[1]);
+                        Point topRight = new Point(topRightCoords[0], topRightCoords[1]);
+                        Point bottomRight = new Point(bottomRightCoords[0], bottomRightCoords[1]);
+                        Point bottomLeft = new Point(bottomLeftCoords[0], bottomLeftCoords[1]);
+                        Point center = new Point(centerCoords[0], centerCoords[1]);
+
+                        // locating the triangles within each block at their proper numbering position
+                        String triangle1 = centerOfTriangle(image, topLeft, topRight, center);
+                        String triangle2 = centerOfTriangle(image, topLeft, bottomLeft, center);
+                        String triangle3 = centerOfTriangle(image, topRight, bottomRight, center);
+                        String triangle4 = centerOfTriangle(image, bottomLeft, bottomRight, center);
+
+                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle1));
+                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle2));
+                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle3));
+                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle4));
+                    }
+                }
+            buildPatches.append("        </Patch>\n");
+        }
+    }
+        return writeXML(buildPatches.toString());
+    }
+       private String writeXML(String patchesContent) {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                "<DigiQuiltSave>\n" +
+                "    <Student>" + studentName + "</Student>\n" +
+                "    <BlockName>" + blockName + "</BlockName>\n" +
+                "    <Timestamp>" + System.currentTimeMillis() + "</Timestamp>\n" +
+                "    <Notes>Translated programmatically via Java Translation Engine</Notes>\n" +
+                "    <Challenge>(no challenge)</Challenge>\n" +
+                "    <Grid>\n" +
+                "        <Line><x1>0.0</x1><y1>0.0</y1><x2>0.0</x2><y2>1.0</y2></Line>\n" +
+                "        <Line><x1>0.0</x1><y1>0.0</y1><x2>1.0</x2><y2>0.0</y2></Line>\n" +
+                "        <Line><x1>0.0</x1><y1>1.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
+                "        <Line><x1>1.0</x1><y1>0.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
+                "    </Grid>\n" +
+                "    <Block size=\"" + quiltSize + "\">\n" +
+                patchesContent +
+                "    </Block>\n" +
+                "    <History>\n" +
+                "        <Undos/>\n" +
+                "    </History>\n" +
+                "</DigiQuiltSave>";
+    }
+    private static class Point {
+        double x, y;
+        Point(double x, double y) { this.x = x; this.y = y; }
     }
 }
