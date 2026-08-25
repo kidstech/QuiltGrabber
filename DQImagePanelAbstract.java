@@ -66,7 +66,6 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         Homography h = new Homography();
         Matrix picPoints = new Matrix (4,2);
         Matrix quiltPoints = new Matrix (4,2);
-        int doubledQuiltSize = 2*(quiltSize);
 
         // Picture points use picture coordinates, so they shouldn't change
         // if the quilt block dimensions change
@@ -95,14 +94,14 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
 
         // top left
         quiltPoints.set(0,0,0);
-        quiltPoints.set(0,1,doubledQuiltSize);
+        quiltPoints.set(0,1,quiltSize);
 
         // top right
-        quiltPoints.set(1,0,doubledQuiltSize);
-        quiltPoints.set(1,1,doubledQuiltSize);
+        quiltPoints.set(1,0,quiltSize);
+        quiltPoints.set(1,1,quiltSize);
 
         // bottom right
-        quiltPoints.set(2,0,doubledQuiltSize);
+        quiltPoints.set(2,0,quiltSize);
         quiltPoints.set(2,1,0);
 
         // bottom left (origin)
@@ -119,44 +118,44 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         // First, we will draw the board lines
         
         // draw vertical lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+        for (int i = 0; i < (quiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(i,0);
-            double [] p2 = h.reverseTranslatePoint(i,doubledQuiltSize);
+            double [] p2 = h.reverseTranslatePoint(i,quiltSize);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw horizontal lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+        for (int i = 0; i < (quiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
-            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,i);
+            double [] p2 = h.reverseTranslatePoint(quiltSize,i);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw 1/4 diagonal lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+        for (int i = 0; i < (quiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(i,0);
-            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,doubledQuiltSize-i);
+            double [] p2 = h.reverseTranslatePoint(quiltSize,quiltSize-i);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw 2/4 diagonal lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+        for (int i = 0; i < (quiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
-            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize-i,doubledQuiltSize);
+            double [] p2 = h.reverseTranslatePoint(quiltSize-i,quiltSize);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
 
         // draw 3/4 diagonal lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+        for (int i = 0; i < (quiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
             double [] p2 = h.reverseTranslatePoint(i,0);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
 
         // draw 4/4 diagonal lines
-        for (int i = 0; i < (doubledQuiltSize+1); i++) {
-            double [] p1 = h.reverseTranslatePoint(i,doubledQuiltSize);
-            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,i);
+        for (int i = 0; i < (quiltSize+1); i++) {
+            double [] p1 = h.reverseTranslatePoint(i,quiltSize);
+            double [] p2 = h.reverseTranslatePoint(quiltSize,i);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
     }
