@@ -17,13 +17,13 @@ public class DQTranslateXML {
 
         this.fabricPalette = new HashMap<>();
         fabricPalette.put("PINK", new Color(220, 150, 160));
-        fabricPalette.put("DARK PINK", new Color(205, 80, 160));
+        fabricPalette.put("REDVIOLET", new Color(205, 80, 160));
         fabricPalette.put("RED", new Color(180, 65, 80));
         fabricPalette.put("ORANGE", new Color(230, 150, 100));
         fabricPalette.put("YELLOW", new Color(240, 215, 50));
-        fabricPalette.put("LIGHT GREEN", new Color(160, 187, 130));
-        fabricPalette.put("GREEN", new Color(79, 140, 105));
-        fabricPalette.put("LIGHT BLUE", new Color(131, 175, 208));
+        fabricPalette.put("GREEN", new Color(160, 187, 130));
+        fabricPalette.put("DARKGREEN", new Color(79, 140, 105));
+        fabricPalette.put("INDIGO", new Color(131, 175, 208));
         fabricPalette.put("BLUE", new Color(60, 100, 190));
         fabricPalette.put("VIOLET", new Color(117, 88, 154));
         fabricPalette.put("WHITE", new Color(246, 236, 235));
