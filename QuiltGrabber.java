@@ -7,9 +7,10 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
+  // quiltSize is number of blocks per one side of the quilt (NOT PATCHES)
   int quiltSize = 4;
   try {
-    bimg = ImageIO.read( new File("Harley-Test-Quilts - Paper-Palette-23.png"));
+    bimg = ImageIO.read( new File("IMG_1932.JPG"));
       } catch( Exception e) {
 	e.printStackTrace();
  	}
