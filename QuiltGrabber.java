@@ -7,9 +7,9 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
-  int quiltSize = 2;
+  int quiltSize = 4;
   try {
-    bimg = ImageIO.read( new File("IMG_1932.JPG"));
+    bimg = ImageIO.read( new File("Harley-Test-Quilts - Paper-Palette-23.png"));
       } catch( Exception e) {
 	e.printStackTrace();
  	}
