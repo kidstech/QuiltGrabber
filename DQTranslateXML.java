@@ -15,6 +15,7 @@ public class DQTranslateXML {
         this.studentName = studentName;
         this.blockName = blockName;
 
+        // fabric palette that corresponds to DigiQuilt Palette
         this.fabricPalette = new HashMap<>();
         fabricPalette.put("PINK", new Color(220, 150, 160));
         fabricPalette.put("REDVIOLET", new Color(205, 80, 160));
@@ -36,6 +37,8 @@ public class DQTranslateXML {
         String closestColor = "TRANSPARENT";
         double minDistance = Double.MAX_VALUE;
 
+        // Color distance calculation similar to dynamic closest color warping technique
+        // Check distance for each color and see which DigiQuilt color is closest to the observed color
         for (Map.Entry<String, Color> entry: fabricPalette.entrySet()) {
             Color paletteColor = entry.getValue();
             double distance = Math.sqrt(
@@ -43,6 +46,7 @@ public class DQTranslateXML {
                 Math.pow((imageColor.getGreen() - paletteColor.getGreen()),2) +
                 Math.pow((imageColor.getBlue() - paletteColor.getBlue()),2)
             );
+            // reassigning closest color if a new smallest distance is found
             if (distance < minDistance) {
                 minDistance = distance;
                 closestColor = entry.getKey();
@@ -51,6 +55,8 @@ public class DQTranslateXML {
         return closestColor;
     }
 
+    // finding the center of a triangle in the grid to sample it's color
+    // currently only one pixel
     private String centerOfTriangle (BufferedImage image, Point p1, Point p2, Point p3) {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
