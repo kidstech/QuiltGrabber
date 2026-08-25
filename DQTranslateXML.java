@@ -55,7 +55,7 @@ public class DQTranslateXML {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
-        if (centerX < 0 || centerX < image.getWidth() || centerY < 0 || centerY < image.getHeight()) {
+        if (centerX < 0 || centerX >= image.getWidth() || centerY < 0 || centerY >= image.getHeight()) {
             return "TRANSPARENT";
         }
 
