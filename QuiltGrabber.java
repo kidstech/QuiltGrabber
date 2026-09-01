@@ -10,7 +10,9 @@ public class QuiltGrabber {
   // quiltSize is number of blocks per one side of the quilt (NOT PATCHES)
   int quiltSize = 4;
   try {
-    bimg = ImageIO.read( new File("IMG_1932.JPG"));
+    bimg = ImageIO.read( new File("IMG_2610.JPG"));
+
+    bimg = ImageResize.resize(bimg, 1000);
       } catch( Exception e) {
 	e.printStackTrace();
  	}
@@ -22,7 +24,6 @@ public class QuiltGrabber {
    myFrame.setBounds(0,0,bimg.getWidth(), bimg.getHeight());
    myFrame.add(dqip);
    myFrame.setVisible(true);
-	
 	
  }
 
