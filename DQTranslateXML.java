@@ -42,9 +42,9 @@ public class DQTranslateXML {
         for (Map.Entry<String, Color> entry: fabricPalette.entrySet()) {
             Color paletteColor = entry.getValue();
             double distance = Math.sqrt(
-                Math.pow((imageColor.getRed() - paletteColor.getRed()),2) +
-                Math.pow((imageColor.getGreen() - paletteColor.getGreen()),2) +
-                Math.pow((imageColor.getBlue() - paletteColor.getBlue()),2)
+                Math.pow((imageColor.getRed() - 10 - paletteColor.getRed()),2) +
+                Math.pow((imageColor.getGreen() - 10 - paletteColor.getGreen()),2) +
+                Math.pow((imageColor.getBlue() - 10 - paletteColor.getBlue()),2)
             );
             // reassigning closest color if a new smallest distance is found
             if (distance < minDistance) {
@@ -61,12 +61,36 @@ public class DQTranslateXML {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
-        if (centerX < 0 || centerX >= image.getWidth() || centerY < 0 || centerY >= image.getHeight()) {
+        int patchWidth = 3;
+        int patchHeight = 3;
+
+        if (centerX < 0 || centerX + patchWidth >= image.getWidth() || centerY < 0 || centerY + patchHeight >= image.getHeight()) {
             return "TRANSPARENT";
         }
 
-        Color triangleColor = new Color(image.getRGB(centerX,centerY));
-        return findClosestColor(triangleColor);
+        int[] pixels = new int[patchWidth * patchHeight];
+
+        image.getRGB(centerX,centerY, patchWidth, patchHeight, pixels, 0, patchWidth);
+
+        int sumRed = 0;
+        int sumGreen = 0;
+        int sumBlue = 0;
+
+        for (int pixel : pixels) {
+            Color color = new Color(pixel);
+            sumRed += color.getRed();
+            sumGreen += color.getGreen();
+            sumBlue += color.getBlue();
+        }
+
+        int totalPixels = pixels.length;
+        Color averageColor = new Color(
+            sumRed/totalPixels,
+            sumGreen/totalPixels,
+            sumBlue/totalPixels
+        );
+
+        return findClosestColor(averageColor);
     }
 
     //building the actual xml file for the quilt
