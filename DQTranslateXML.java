@@ -192,7 +192,7 @@ public class DQTranslateXML {
                 "    <Student>" + studentName + "</Student>\n" +
                 "    <BlockName>" + blockName + "</BlockName>\n" +
                 "    <Timestamp>" + System.currentTimeMillis() + "</Timestamp>\n" +
-                "    <Notes>Translated programmatically via Java Translation Engine</Notes>\n" +
+                "    <Notes>Translated programmatically via QuiltGrabber</Notes>\n" +
                 "    <Challenge>(no challenge)</Challenge>\n" +
                 "    <Grid>\n" +
                 "        <Line><x1>0.0</x1><y1>0.0</y1><x2>0.0</x2><y2>1.0</y2></Line>\n" +
