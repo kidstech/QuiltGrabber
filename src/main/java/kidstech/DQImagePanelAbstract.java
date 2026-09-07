@@ -183,6 +183,8 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
                 String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
 
                 String savePath = "./Translated-Quilt.xml.gz";
+                String PNGSavePath = "./Translated-Quilt.png";
+
                 System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
                 try (FileOutputStream fileStream = new FileOutputStream(savePath);
                     GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)) {
@@ -193,6 +195,8 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
                     gzipStream.write(xmlBytes);
 
                     gzipStream.finish();
+
+                    DQGeneratePNG.saveAsPNG(this, PNGSavePath);
 
                 // // Instantly writes the exact byte footprint profile directly down to the hard drive path
                 // Files.write(Paths.get(savePath), compiledXMLPayload.getBytes(), 
