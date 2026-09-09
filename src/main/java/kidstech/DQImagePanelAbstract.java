@@ -14,6 +14,10 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.swing.*;
 
+import kidstech.pngGeneration.DQGeneratePNG;
+import kidstech.pngGeneration.LoadXML;
+import kidstech.quiltObjects.Block;
+import kidstech.quiltObjects.Grid;
 import resources.Jama.Matrix;
 
 public class DQImagePanelAbstract extends JPanel implements MouseListener, MouseMotionListener {
@@ -183,7 +187,8 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
                 String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
 
                 String savePath = "./Translated-Quilt.xml.gz";
-                String PNGSavePath = "./Translated-Quilt.png";
+                String grabPNGSavePath = "./Quilt-Grab.png";
+                String quiltPNGSavePath = "./Translated-Quilt.png";
 
                 System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
                 try (FileOutputStream fileStream = new FileOutputStream(savePath);
@@ -196,7 +201,12 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
 
                     gzipStream.finish();
 
-                    DQGeneratePNG.saveAsPNG(this, PNGSavePath);
+                    LoadXML loader = new LoadXML(savePath);
+                    Block translatedBlock = loader.getCurrentBlock();
+
+                    DQGeneratePNG.saveGrabAsPNG(this, grabPNGSavePath);
+
+                    DQGeneratePNG.saveQuiltAsPNG(translatedBlock, this.quiltSize, quiltPNGSavePath);
 
                 // // Instantly writes the exact byte footprint profile directly down to the hard drive path
                 // Files.write(Paths.get(savePath), compiledXMLPayload.getBytes(), 
@@ -205,9 +215,9 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
                 // System.out.println(" SUCCESS: DIGIQUILT XML SAVED!");
                 // System.out.println(" Location: " + savePath);
 
-                }catch (IOException ioException) {
+                }catch (Exception exception) {
                 System.err.println("ERROR: FAILED TO SAVE FILE");
-                ioException.printStackTrace();
+                exception.printStackTrace();
             }
             }
         }
