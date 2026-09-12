@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.JLayeredPane;
 
@@ -53,7 +54,7 @@ public class DQGeneratePNG {
         
         try {
             int sideSize = block.getSideSize();
-            int patchPixelSize = 250;
+            int patchPixelSize = 200;
             int totalPixelDimension = sideSize * patchPixelSize;
             Dimension picSize = new Dimension(totalPixelDimension, totalPixelDimension);
 
