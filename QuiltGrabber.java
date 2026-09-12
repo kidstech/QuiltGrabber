@@ -7,20 +7,23 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
+  // quiltSize is number of blocks per one side of the quilt (NOT PATCHES)
+  int quiltSize = 4;
   try {
-    bimg = ImageIO.read( new File("test.jpg"));
+    bimg = ImageIO.read( new File("IMG_2610.JPG"));
+
+    bimg = ImageResize.resize(bimg, 1000);
       } catch( Exception e) {
 	e.printStackTrace();
  	}
    System.out.println("Click the four corners of the DigiQuilt.");
    System.out.println("Start at the top left, then work your way clockwise!");
 	
-   DQImagePanel dqip = new DQImagePanel(bimg);
+   DQImagePanelAbstract dqip = new DQImagePanelAbstract(bimg, quiltSize);
    JFrame myFrame = new JFrame("QuiltGrabber");
    myFrame.setBounds(0,0,bimg.getWidth(), bimg.getHeight());
    myFrame.add(dqip);
    myFrame.setVisible(true);
-	
 	
  }
 
