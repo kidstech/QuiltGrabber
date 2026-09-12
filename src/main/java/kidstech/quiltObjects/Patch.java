@@ -1,5 +1,7 @@
 package kidstech.quiltObjects;
 
+// Code by BrianOhs and  AndyMitchell, in DigiQuilt
+
 // referenced from DigiQuilt
 public class Patch {
     /**

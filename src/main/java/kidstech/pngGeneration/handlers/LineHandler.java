@@ -5,16 +5,10 @@ import java.awt.geom.Line2D;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+// Code by Jason Biatek, biatekjt
+// on Date: 2009-06-10 16:58:41
 
-/**
- * XML handler to load a single grid line from XML.
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.1 $
- *
- */
-
+// referenced from DigiQuilt
 public class LineHandler extends DelegatingHandler {
 
     /**

@@ -1,13 +1,16 @@
 package kidstech.pngGeneration.handlers;
 
-import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
 
 import kidstech.quiltObjects.Block;
 import kidstech.quiltObjects.Grid;
 
+// Code by Jason Biatek, biatekjt 
+// on Date: 2009-06-10 16:58:41
+
+// referenced from DigiQuilt
 public class DQSAXHandler extends DelegatingHandler {
 
     /**

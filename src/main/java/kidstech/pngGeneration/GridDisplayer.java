@@ -2,6 +2,8 @@ package kidstech.pngGeneration;
 
 import kidstech.quiltObjects.Grid;
 
+// Code by biatekjt, in DigiQuilt
+
 // referenced from DigiQuilt
 public interface GridDisplayer {
     /**

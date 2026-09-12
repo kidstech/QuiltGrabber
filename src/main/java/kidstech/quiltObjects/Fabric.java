@@ -2,6 +2,8 @@ package kidstech.quiltObjects;
 
 import java.awt.Color;
 
+// Code by BrianOhs and  AndyMitchell, in DigiQuilt
+
 // referenced from DigiQuilt
 public enum Fabric {
     /**

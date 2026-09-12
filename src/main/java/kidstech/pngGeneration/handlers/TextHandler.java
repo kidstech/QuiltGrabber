@@ -3,15 +3,8 @@ package kidstech.pngGeneration.handlers;
 import org.xml.sax.SAXException;
 
 
-/**
- * An XML handler for simple tags which only contain text, such as:
- * &lt;example&gt;This text will be collected by TextHandler&lt;/example&gt;
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.1 $
- *
- */
+// Code by Jason Biatek, biatekjt
+// on Date: 2009-06-10 16:58:41
 
 // referenced from DigiQuilt
 public class TextHandler extends DelegatingHandler {

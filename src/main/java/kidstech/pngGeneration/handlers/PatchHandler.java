@@ -6,14 +6,11 @@ import org.xml.sax.SAXException;
 import kidstech.quiltObjects.Fabric;
 import kidstech.quiltObjects.Patch;
 
-/**
- * XML Handler to load a single Patch from XML.
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.1 $
- *
- */
+
+// Code by Jason Biatek, biatekjt
+// on Date: 2009-06-10 16:58:41
+
+// referenced from DigiQuilt
 public class PatchHandler extends DelegatingHandler {
 
     /**

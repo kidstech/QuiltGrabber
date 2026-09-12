@@ -3,6 +3,8 @@ package kidstech.quiltObjects;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
+// Code by deragonmr, in DigiQuilt
+
 // referenced from DigiQuilt
 @SuppressWarnings("serial")
 public class Grid extends ArrayList<Line2D.Double>{

@@ -3,6 +3,8 @@ package kidstech.quiltObjects;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+// Code by BrianOhs and  AndyMitchell, in DigiQuilt
+
 // referenced from DigiQuilt
 public class Block implements Iterable<Patch>{
 

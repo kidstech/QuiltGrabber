@@ -15,6 +15,13 @@ import javax.swing.JLayeredPane;
 import kidstech.quiltObjects.Block;
 import kidstech.quiltObjects.Grid;
 
+/**
+ * Generate PNGs of both the QuiltGrab and the generated quilt from the image panel
+ * 
+ * @author Harley Hannahs, user: imbroglio-0
+ *
+ */
+
 public class DQGeneratePNG {
     public static BufferedImage generatePNG (Component myComponent) {
         // referenced from DigiQuilt blockSave code

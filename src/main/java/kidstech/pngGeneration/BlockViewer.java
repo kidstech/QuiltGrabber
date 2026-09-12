@@ -8,6 +8,11 @@ import javax.swing.JPanel;
 
 import kidstech.quiltObjects.Block;
 
+
+// Code by deragonmr, in DigiQuilt
+
+
+// referenced from DigiQuilt
 @SuppressWarnings("serial")
 public class BlockViewer extends JPanel{
 

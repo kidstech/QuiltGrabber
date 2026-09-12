@@ -14,13 +14,7 @@ import kidstech.pngGeneration.handlers.DQSAXHandler;
 import kidstech.quiltObjects.Block;
 import kidstech.quiltObjects.Grid;
 
-
-
-/**
- * @author DanielSelifonov, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.2 $
- */
+// Code by Daniel Selifonov, in DigiQuilt
 
 // referenced from DigiQuilt
 public class LoadXML

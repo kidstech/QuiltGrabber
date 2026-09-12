@@ -6,6 +6,8 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
+// Code by jbiatek, in DigiQuilt
+
 // referenced from DigiQuilt
 public class Tile {
 

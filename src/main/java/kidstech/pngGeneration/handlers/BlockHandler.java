@@ -7,15 +7,8 @@ import org.xml.sax.SAXException;
 import kidstech.quiltObjects.Block;
 import kidstech.quiltObjects.Patch;
 
-/**
- * XML handler which can load one Block from XML. Will pass this block
- * up to its parent.
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.1 $
- *
- */
+// Code by Jason Biatek, biatekjt 
+// on Date: 2009-06-10 16:58:41 $
 
 // referenced from DigiQuilt
 public class BlockHandler extends DelegatingHandler {

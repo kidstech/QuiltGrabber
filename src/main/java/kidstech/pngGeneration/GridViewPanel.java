@@ -10,6 +10,7 @@ import java.awt.geom.Line2D;
 
 import kidstech.quiltObjects.Grid;
 
+// Code by deragonmr, in DigiQuilt
 // referenced from DigiQuilt
 @SuppressWarnings("serial")
 public class GridViewPanel extends JPanel {

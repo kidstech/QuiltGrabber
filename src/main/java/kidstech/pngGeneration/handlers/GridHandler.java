@@ -7,14 +7,8 @@ import org.xml.sax.SAXException;
 
 import kidstech.quiltObjects.Grid;
 
-/**
- * XML handler which loads a Grid from XML.
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-07-01 23:35:06 $
- * @version $Revision: 1.2 $
- *
- */
+// Code by Jason Biatek, biatekjt
+// on Date: 2009-07-01 23:35:06
 
 // referenced from DigiQuilt
 public class GridHandler extends DelegatingHandler {

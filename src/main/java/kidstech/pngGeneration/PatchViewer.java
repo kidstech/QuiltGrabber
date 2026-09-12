@@ -11,6 +11,9 @@ import javax.swing.JPanel;
 import kidstech.quiltObjects.Patch;
 import kidstech.quiltObjects.Tile;
 
+// Code by biatekjt, in DigiQuilt
+
+// referenced from DigiQuilt
 @SuppressWarnings("serial")
 public class PatchViewer extends JPanel {
 

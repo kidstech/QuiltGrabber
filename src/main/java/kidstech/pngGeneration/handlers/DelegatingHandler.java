@@ -3,23 +3,8 @@ package kidstech.pngGeneration.handlers;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * A ContentHandler which allows multiple ContentHandlers to also get
- * SAX events. Normally only one Handler is allowed to receive these.<br>
- * <br>
- * A subclass can receive XML events from an XML reader by overriding the
- * methods in DefaultHandler and dealing with them. Alternatively, they can
- * create a new DelegatingHandler and pass control off to it temporarily. The
- * child may be specially built to deal with a certain tag in XML. After the
- * child is done, it can pass a resulting Object to its parent using the
- * childFinished() method and return control to the parent by executing
- * stopHandlingEvents(). 
- * 
- * @author Jason Biatek, last changed by $Author: biatekjt $
- * on $Date: 2009-06-10 16:58:41 $
- * @version $Revision: 1.1 $
- *
- */
+// Code by Jason Biatek, biatekjt
+// on Date: 2009-06-10 16:58:41
 
 // referenced from DigiQuilt
 public abstract class DelegatingHandler extends DefaultHandler{
