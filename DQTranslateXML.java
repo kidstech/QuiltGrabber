@@ -6,12 +6,14 @@ import java.util.Map;
 
 public class DQTranslateXML {
     private final int quiltSize;
+    private final int doubledQuiltSize;
     private final String studentName;
     private final String blockName;
     private final Map<String, Color> fabricPalette;
 
     public DQTranslateXML (int quiltSize, String studentName, String blockName) {
         this.quiltSize = quiltSize;
+        this.doubledQuiltSize = quiltSize * 2;
         this.studentName = studentName;
         this.blockName = blockName;
 
@@ -130,14 +132,14 @@ public class DQTranslateXML {
 
          // top left
         quiltPoints.set(0,0,0);
-        quiltPoints.set(0,1,quiltSize);
+        quiltPoints.set(0,1,doubledQuiltSize);
 
         // top right
-        quiltPoints.set(1,0,quiltSize);
-        quiltPoints.set(1,1,quiltSize);
+        quiltPoints.set(1,0,doubledQuiltSize);
+        quiltPoints.set(1,1,doubledQuiltSize);
 
         // bottom right
-        quiltPoints.set(2,0,quiltSize);
+        quiltPoints.set(2,0,doubledQuiltSize);
         quiltPoints.set(2,1,0);
 
         // bottom left (origin)
@@ -149,14 +151,14 @@ public class DQTranslateXML {
         StringBuilder buildPatches = new StringBuilder();
 
         // these loops make steps by two, assuring that we are assigning a patch as
-        // a block of 16 triangles, like the xml is generated in DigiQuilt terms.
-        // For a 2x2 patch quilt, there are 4 blocks in each patch, so we must take 
+        // a square of 16 triangles, like the xml is generated in DigiQuilt terms.
+        // For a 2x2 patch quilt, there are 4 patches in each block, so we must take 
         // steps of 2 to properly represent the quilt.
 
-        for (int i = quiltSize - 2; i >= 0; i-=2) {
-            for (int j = 0; j < quiltSize; j+=2) {
+        for (int i = doubledQuiltSize - 2; i >= 0; i-= 2) {
+            for (int j = 0; j < doubledQuiltSize; j+= 2) {
                 buildPatches.append("        <Patch>\n");
-                // one patch per 4 blocks
+                // 4 patches to one block
 
                 // rows and columns WITHIN the patch itself
                 for (int row = 1; row >= 0; row--) {
@@ -180,7 +182,7 @@ public class DQTranslateXML {
                         Point bottomLeft = new Point(bottomLeftCoords[0], bottomLeftCoords[1]);
                         Point center = new Point(centerCoords[0], centerCoords[1]);
 
-                        // locating the triangles within each block at their proper numbering position
+                        // locating the triangles within each patch at their proper numbering position
                         String triangle1 = samplePatch(image, topLeft, topRight, center);
                         String triangle2 = samplePatch(image, topLeft, bottomLeft, center);
                         String triangle3 = samplePatch(image, topRight, bottomRight, center);
@@ -211,7 +213,7 @@ public class DQTranslateXML {
                 "        <Line><x1>0.0</x1><y1>1.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "        <Line><x1>1.0</x1><y1>0.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "    </Grid>\n" +
-                "    <Block size=\"" + quiltSize + "\">\n" +
+                "    <Block size=\"" + doubledQuiltSize + "\">\n" +
                 patchesContent +
                 "    </Block>\n" +
                 "    <History>\n" +

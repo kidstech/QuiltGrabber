@@ -17,7 +17,7 @@ import javax.swing.*;
 public class DQImagePanelAbstract extends JPanel implements MouseListener, MouseMotionListener {
     private BufferedImage image;
     private int quiltSize;
-    private int doubledQuiltSize = quiltSize * 2;
+    private int doubledQuiltSize;
     private int[][] corners = new int[2][4];
     private int index = 0;
     private int currentX;
@@ -27,6 +27,7 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         super();
         this.image = image;
         this.quiltSize = quiltSize;
+        this.doubledQuiltSize = quiltSize *2;
         addMouseListener(this);
         addMouseMotionListener(this);
     }
@@ -175,7 +176,7 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             if (index ==4) {
                 System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
 
-                DQTranslateXML translator = new DQTranslateXML(this.doubledQuiltSize, "QuiltGrabber-Translated-Quilt", "Translated-Quilt-1");
+                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber-Translated-Quilt", "Translated-Quilt-1");
 
                 Homography h = new Homography();
 
