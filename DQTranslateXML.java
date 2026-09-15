@@ -213,7 +213,7 @@ public class DQTranslateXML {
                 "        <Line><x1>0.0</x1><y1>1.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "        <Line><x1>1.0</x1><y1>0.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "    </Grid>\n" +
-                "    <Block size=\"" + doubledQuiltSize + "\">\n" +
+                "    <Block size=\"" + quiltSize * quiltSize + "\">\n" +
                 patchesContent +
                 "    </Block>\n" +
                 "    <History>\n" +
