@@ -54,8 +54,20 @@ public class DQTranslateXML {
         }
         return closestColor;
     }
+    // finding the center of a triangle in the grid to sample its color
+    private String samplePixel (BufferedImage image, Point p1, Point p2, Point p3) {
+        int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
+        int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
-    // finding the center of a triangle in the grid to sample it's color
+        if (centerX < 0 || centerX >= image.getWidth() || centerY < 0 || centerY >= image.getHeight()) {
+            return "TRANSPARENT";
+        }
+
+        Color triangleColor = new Color(image.getRGB(centerX,centerY));
+        return findClosestColor(triangleColor);
+    }
+
+    // sampling a patch instead of a single pixel
     private String samplePatch (BufferedImage image, Point p1, Point p2, Point p3) {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
