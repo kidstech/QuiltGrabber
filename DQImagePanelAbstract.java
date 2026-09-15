@@ -176,13 +176,29 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             if (index ==4) {
                 System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
 
-                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber-Translated-Quilt", "Translated-Quilt-1");
+                // blockName setup
+                String prefix = "Translated-Quilt-";
+                int count = 1;
+                File file;
+
+                // finding first available file name (number)
+                while (true) {
+                    String fileName = prefix + count + ".xml.gz";
+                    file = new File(fileName);
+                if (!file.exists()) {
+                    break; // Found an available number
+                }
+                count++;
+                }
+                String blockName = prefix + count;
+
+                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
 
                 Homography h = new Homography();
 
                 String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
 
-                String savePath = "./Translated-Quilt.xml.gz";
+                String savePath = "./" + blockName + ".xml.gz";
                 System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
                 try (FileOutputStream fileStream = new FileOutputStream(savePath);
                     GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)) {
