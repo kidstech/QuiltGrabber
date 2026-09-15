@@ -7,15 +7,17 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
+  // quiltSize is number of patches per one side of the quilt (standard DigiQuilt sizes are 2x2, 3x3, 4x4)
+  int quiltSize = 2;
   try {
-    bimg = ImageIO.read( new File("test.jpg"));
+    bimg = ImageIO.read( new File("IMG_1932.JPG"));
       } catch( Exception e) {
 	e.printStackTrace();
  	}
    System.out.println("Click the four corners of the DigiQuilt.");
    System.out.println("Start at the top left, then work your way clockwise!");
 	
-   DQImagePanel dqip = new DQImagePanel(bimg);
+   DQImagePanelAbstract dqip = new DQImagePanelAbstract(bimg, quiltSize);
    JFrame myFrame = new JFrame("QuiltGrabber");
    myFrame.setBounds(0,0,bimg.getWidth(), bimg.getHeight());
    myFrame.add(dqip);
