@@ -8,12 +8,14 @@ import resources.Jama.Matrix;
 
 public class DQTranslateXML {
     private final int quiltSize;
+    private final int doubledQuiltSize;
     private final String studentName;
     private final String blockName;
     private final Map<String, Color> fabricPalette;
 
     public DQTranslateXML (int quiltSize, String studentName, String blockName) {
         this.quiltSize = quiltSize;
+        this.doubledQuiltSize = quiltSize * 2;
         this.studentName = studentName;
         this.blockName = blockName;
 
@@ -121,14 +123,14 @@ public class DQTranslateXML {
 
          // top left
         quiltPoints.set(0,0,0);
-        quiltPoints.set(0,1,quiltSize);
+        quiltPoints.set(0,1,doubledQuiltSize);
 
         // top right
-        quiltPoints.set(1,0,quiltSize);
-        quiltPoints.set(1,1,quiltSize);
+        quiltPoints.set(1,0,doubledQuiltSize);
+        quiltPoints.set(1,1,doubledQuiltSize);
 
         // bottom right
-        quiltPoints.set(2,0,quiltSize);
+        quiltPoints.set(2,0,doubledQuiltSize);
         quiltPoints.set(2,1,0);
 
         // bottom left (origin)
@@ -144,8 +146,8 @@ public class DQTranslateXML {
         // For a 2x2 patch quilt, there are 4 blocks in each patch, so we must take 
         // steps of 2 to properly represent the quilt.
 
-        for (int i = quiltSize - 2; i >= 0; i-=2) {
-            for (int j = 0; j < quiltSize; j+=2) {
+        for (int i = doubledQuiltSize - 2; i >= 0; i-=2) {
+            for (int j = 0; j < doubledQuiltSize; j+=2) {
                 buildPatches.append("        <Patch>\n");
                 // one patch per 4 blocks
 
@@ -202,7 +204,7 @@ public class DQTranslateXML {
                 "        <Line><x1>0.0</x1><y1>1.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "        <Line><x1>1.0</x1><y1>0.0</y1><x2>1.0</x2><y2>1.0</y2></Line>\n" +
                 "    </Grid>\n" +
-                "    <Block size=\"" + quiltSize + "\">\n" +
+                "    <Block size=\"" + quiltSize * quiltSize + "\">\n" +
                 patchesContent +
                 "    </Block>\n" +
                 "    <History>\n" +

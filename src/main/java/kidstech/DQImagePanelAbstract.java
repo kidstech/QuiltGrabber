@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 // import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import resources.Jama.Matrix;
 public class DQImagePanelAbstract extends JPanel implements MouseListener, MouseMotionListener {
     private BufferedImage image;
     private int quiltSize;
+    private int doubledQuiltSize;
     private int[][] corners = new int[2][4];
     private int index = 0;
     private int currentX;
@@ -32,6 +34,7 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         super();
         this.image = image;
         this.quiltSize = quiltSize;
+        this.doubledQuiltSize = quiltSize * 2;
         addMouseListener(this);
         addMouseMotionListener(this);
     }
@@ -100,14 +103,14 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
 
         // top left
         quiltPoints.set(0,0,0);
-        quiltPoints.set(0,1,quiltSize);
+        quiltPoints.set(0,1,doubledQuiltSize);
 
         // top right
-        quiltPoints.set(1,0,quiltSize);
-        quiltPoints.set(1,1,quiltSize);
+        quiltPoints.set(1,0,doubledQuiltSize);
+        quiltPoints.set(1,1,doubledQuiltSize);
 
         // bottom right
-        quiltPoints.set(2,0,quiltSize);
+        quiltPoints.set(2,0,doubledQuiltSize);
         quiltPoints.set(2,1,0);
 
         // bottom left (origin)
@@ -124,44 +127,44 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         // First, we will draw the board lines
         
         // draw vertical lines
-        for (int i = 0; i < (quiltSize+1); i++) {
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(i,0);
-            double [] p2 = h.reverseTranslatePoint(i,quiltSize);
+            double [] p2 = h.reverseTranslatePoint(i,doubledQuiltSize);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw horizontal lines
-        for (int i = 0; i < (quiltSize+1); i++) {
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
-            double [] p2 = h.reverseTranslatePoint(quiltSize,i);
+            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,i);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw 1/4 diagonal lines
-        for (int i = 0; i < (quiltSize+1); i++) {
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(i,0);
-            double [] p2 = h.reverseTranslatePoint(quiltSize,quiltSize-i);
+            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,doubledQuiltSize-i);
             g.drawLine((int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1]);
         }
 
         // draw 2/4 diagonal lines
-        for (int i = 0; i < (quiltSize+1); i++) {
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
-            double [] p2 = h.reverseTranslatePoint(quiltSize-i,quiltSize);
+            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize-i,doubledQuiltSize);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
 
         // draw 3/4 diagonal lines
-        for (int i = 0; i < (quiltSize+1); i++) {
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
             double [] p1 = h.reverseTranslatePoint(0,i);
             double [] p2 = h.reverseTranslatePoint(i,0);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
 
         // draw 4/4 diagonal lines
-        for (int i = 0; i < (quiltSize+1); i++) {
-            double [] p1 = h.reverseTranslatePoint(i,quiltSize);
-            double [] p2 = h.reverseTranslatePoint(quiltSize,i);
+        for (int i = 0; i < (doubledQuiltSize+1); i++) {
+            double [] p1 = h.reverseTranslatePoint(i,doubledQuiltSize);
+            double [] p2 = h.reverseTranslatePoint(doubledQuiltSize,i);
             g.drawLine( (int)p1[0], (int)p1[1], (int)p2[0], (int)p2[1] );
         }
     }
@@ -172,6 +175,23 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         {
             if (index == 4) index = 0;
 
+            // blockName setup
+                String prefix = "Translated-Quilt-";
+                int count = 1;
+                File file;
+
+                // finding first available file name (number)
+                while (true) {
+                    String fileName = prefix + count + ".xml.gz";
+                    file = new File(fileName);
+                if (!file.exists()) {
+                    break; // Found an available number
+                }
+                count++;
+                }
+
+                String blockName = prefix + count;
+
             corners[0][index] = e.getX();
             corners[1][index] = e.getY();
             index = index+1;
@@ -180,15 +200,15 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             if (index ==4) {
                 System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
 
-                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber-Translated-Quilt", "Translated-Quilt-1");
+                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
 
                 Homography h = new Homography();
 
                 String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
 
-                String savePath = "./Translated-Quilt.xml.gz";
-                String grabPNGSavePath = "./Quilt-Grab.png";
-                String quiltPNGSavePath = "./Translated-Quilt.png";
+                String savePath = "./" + blockName + ".xml.gz";
+                String grabPNGSavePath = "./QuiltGrab-" + blockName + ".png";
+                String quiltPNGSavePath = "./" + blockName + ".png";
 
                 System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
                 try (FileOutputStream fileStream = new FileOutputStream(savePath);

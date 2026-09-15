@@ -68,7 +68,7 @@ public class DQGeneratePNG {
             BlockViewer quiltViewer = new BlockViewer(block, patchPixelSize);
             GridViewPanel gridOverlay = new GridViewPanel(sideSize, patchPixelSize);
             
-            int dynamicGridLines = quiltSize/2;
+            int dynamicGridLines = quiltSize;
             Grid dynamicGrid = new Grid(dynamicGridLines, dynamicGridLines, 0, 0);
             gridOverlay.setGrid(dynamicGrid);
 
