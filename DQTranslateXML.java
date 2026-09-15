@@ -56,8 +56,7 @@ public class DQTranslateXML {
     }
 
     // finding the center of a triangle in the grid to sample it's color
-    // currently only one pixel
-    private String centerOfTriangle (BufferedImage image, Point p1, Point p2, Point p3) {
+    private String samplePatch (BufferedImage image, Point p1, Point p2, Point p3) {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
@@ -170,10 +169,10 @@ public class DQTranslateXML {
                         Point center = new Point(centerCoords[0], centerCoords[1]);
 
                         // locating the triangles within each block at their proper numbering position
-                        String triangle1 = centerOfTriangle(image, topLeft, topRight, center);
-                        String triangle2 = centerOfTriangle(image, topLeft, bottomLeft, center);
-                        String triangle3 = centerOfTriangle(image, topRight, bottomRight, center);
-                        String triangle4 = centerOfTriangle(image, bottomLeft, bottomRight, center);
+                        String triangle1 = samplePatch(image, topLeft, topRight, center);
+                        String triangle2 = samplePatch(image, topLeft, bottomLeft, center);
+                        String triangle3 = samplePatch(image, topRight, bottomRight, center);
+                        String triangle4 = samplePatch(image, bottomLeft, bottomRight, center);
 
                         buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle1));
                         buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle2));
