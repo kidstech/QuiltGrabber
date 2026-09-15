@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
@@ -7,7 +8,7 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
-  int quiltSize = 2;
+  int quiltSize = 2; // number of patches across one side of quilt (standard DigiQuilt options are 2x2, 3x3, 4x4)
   try {
     bimg = ImageIO.read( new File("IMG_1932.JPG"));
       } catch( Exception e) {
