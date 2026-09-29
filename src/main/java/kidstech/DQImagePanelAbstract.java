@@ -34,6 +34,7 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         super();
         this.image = image;
         this.quiltSize = quiltSize;
+        this.doubledQuiltSize = quiltSize * 2;
         addMouseListener(this);
         addMouseMotionListener(this);
     }
