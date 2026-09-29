@@ -201,19 +201,6 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
 
                 DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
 
-                // finding first available file name (number)
-                while (true) {
-                    String fileName = prefix + count + ".xml.gz";
-                    file = new File(fileName);
-                if (!file.exists()) {
-                    break; // Found an available number
-                }
-                count++;
-                }
-                String blockName = prefix + count;
-
-                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
-
                 Homography h = new Homography();
 
                 String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
