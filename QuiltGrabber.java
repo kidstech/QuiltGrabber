@@ -8,7 +8,8 @@ public class QuiltGrabber {
 
  public static void main( String args[]) {
   BufferedImage bimg = null;
-  int quiltSize = 2; // number of patches across one side of quilt (standard DigiQuilt options are 2x2, 3x3, 4x4)
+  // quiltSize is number of patches per one side of the quilt (standard DigiQuilt sizes are 2x2, 3x3, 4x4)
+  int quiltSize = 2;
   try {
     bimg = ImageIO.read( new File("IMG_2610.JPG"));
 
