@@ -58,10 +58,21 @@ public class DQTranslateXML {
         }
         return closestColor;
     }
+    // finding the center of a triangle in the grid to sample its color
+    private String samplePixel (BufferedImage image, Point p1, Point p2, Point p3) {
+        int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
+        int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
-    // finding the center of a triangle in the grid to sample it's color
-    // currently only one pixel
-    private String centerOfTriangle (BufferedImage image, Point p1, Point p2, Point p3) {
+        if (centerX < 0 || centerX >= image.getWidth() || centerY < 0 || centerY >= image.getHeight()) {
+            return "TRANSPARENT";
+        }
+
+        Color triangleColor = new Color(image.getRGB(centerX,centerY));
+        return findClosestColor(triangleColor);
+    }
+
+    // sampling a patch instead of a single pixel
+    private String samplePatch (BufferedImage image, Point p1, Point p2, Point p3) {
         int centerX = (int) ((p1.x + p2.x + p3.x) / 3);
         int centerY = (int) ((p1.y + p2.y + p3.y) / 3);
 
@@ -142,14 +153,14 @@ public class DQTranslateXML {
         StringBuilder buildPatches = new StringBuilder();
 
         // these loops make steps by two, assuring that we are assigning a patch as
-        // a block of 16 triangles, like the xml is generated in DigiQuilt terms.
-        // For a 2x2 patch quilt, there are 4 blocks in each patch, so we must take 
+        // a square of 16 triangles, like the xml is generated in DigiQuilt terms.
+        // For a 2x2 patch quilt, there are 4 patches in each block, so we must take 
         // steps of 2 to properly represent the quilt.
 
-        for (int i = doubledQuiltSize - 2; i >= 0; i-=2) {
-            for (int j = 0; j < doubledQuiltSize; j+=2) {
+        for (int i = doubledQuiltSize - 2; i >= 0; i-= 2) {
+            for (int j = 0; j < doubledQuiltSize; j+= 2) {
                 buildPatches.append("        <Patch>\n");
-                // one patch per 4 blocks
+                // 4 patches to one block
 
                 // rows and columns WITHIN the patch itself
                 for (int row = 1; row >= 0; row--) {
@@ -173,11 +184,11 @@ public class DQTranslateXML {
                         Point bottomLeft = new Point(bottomLeftCoords[0], bottomLeftCoords[1]);
                         Point center = new Point(centerCoords[0], centerCoords[1]);
 
-                        // locating the triangles within each block at their proper numbering position
-                        String triangle1 = centerOfTriangle(image, topLeft, topRight, center);
-                        String triangle2 = centerOfTriangle(image, topLeft, bottomLeft, center);
-                        String triangle3 = centerOfTriangle(image, topRight, bottomRight, center);
-                        String triangle4 = centerOfTriangle(image, bottomLeft, bottomRight, center);
+                        // locating the triangles within each patch at their proper numbering position
+                        String triangle1 = samplePatch(image, topLeft, topRight, center);
+                        String triangle2 = samplePatch(image, topLeft, bottomLeft, center);
+                        String triangle3 = samplePatch(image, topRight, bottomRight, center);
+                        String triangle4 = samplePatch(image, bottomLeft, bottomRight, center);
 
                         buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle1));
                         buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle2));
