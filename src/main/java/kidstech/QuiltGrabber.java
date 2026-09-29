@@ -23,7 +23,8 @@ public class QuiltGrabber {
   // quiltSize is number of patches per one side of the quilt (standard DigiQuilt sizes are 2x2, 3x3, 4x4)
   quiltSize = 4;
   try {
-    bimg = ImageIO.read( new File("src/test/resources/QuiltPhotos/IMG_1934.JPG"));
+    bimg = ImageIO.read( new File("src/test/resources/QuiltPhotos/IMG_1929.JPG"));
+    bimg = ImageResize.resize(bimg, 1000);
   } catch( Exception e) {
     e.printStackTrace();
  	}
