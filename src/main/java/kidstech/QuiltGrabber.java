@@ -76,13 +76,13 @@ public class QuiltGrabber {
   fileChooser.setTitle("Open Image File");
 
   // create a Button
-  Button openFile = new Button("Choose File");
+  Button chooseFile = new Button("Choose File");
 
   // create an Event Handler
-  openFile.setOnAction(new EventHandler<ActionEvent>() {
+  chooseFile.setOnAction(new EventHandler<ActionEvent>() {
 
     public void handle(ActionEvent e) {
-      Window stage = openFile.getScene().getWindow();
+      Window stage = chooseFile.getScene().getWindow();
 
       // get the file selected
       File file = fileChooser.showOpenDialog(stage);
