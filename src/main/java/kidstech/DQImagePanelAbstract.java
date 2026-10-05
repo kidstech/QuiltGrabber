@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 // import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+// import java.io.IOException;
 // import java.nio.file.Files;
 // import java.nio.file.Paths;
 // import java.nio.file.StandardOpenOption;
@@ -18,7 +18,7 @@ import javax.swing.*;
 import kidstech.pngGeneration.DQGeneratePNG;
 import kidstech.pngGeneration.LoadXML;
 import kidstech.quiltObjects.Block;
-import kidstech.quiltObjects.Grid;
+// import kidstech.quiltObjects.Grid;
 import resources.Jama.Matrix;
 
 public class DQImagePanelAbstract extends JPanel implements MouseListener, MouseMotionListener {
@@ -58,6 +58,12 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             this.revalidate();
             this.repaint();
     });
+    }
+
+    // repaints image from chosen file
+    public void updateImage(BufferedImage newImage) {
+        this.image = newImage;
+        this.repaint();
     }
 
     protected void paintComponent(Graphics g) {
