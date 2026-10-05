@@ -2,9 +2,13 @@ package kidstech;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
 import javafx.embed.swing.JFXPanel;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 public class QuiltGrabber {
 
  private static int quiltSize;
@@ -21,20 +27,20 @@ public class QuiltGrabber {
  public static void main( String args[]) {
   BufferedImage bimg = null;
   // quiltSize is number of patches per one side of the quilt (standard DigiQuilt sizes are 2x2, 3x3, 4x4)
-  quiltSize = 4;
-  try {
-    bimg = ImageIO.read( new File("src/test/resources/QuiltPhotos/IMG_1929.JPG"));
-    bimg = ImageResize.resize(bimg, 1000);
-  } catch( Exception e) {
-    e.printStackTrace();
- 	}
+  quiltSize = 4; // default
+  // try {
+  //   bimg = ImageIO.read( new File("src/test/resources/QuiltPhotos/IMG_1929.JPG"));
+  //   bimg = ImageResize.resize(bimg, 1000);
+  // } catch( Exception e) {
+  //   e.printStackTrace();
+ 	// }
 
   System.out.println("Click the four corners of the DigiQuilt.");
   System.out.println("Start at the top left, then work your way clockwise!");
 	
   DQImagePanelAbstract dqip = new DQImagePanelAbstract(bimg, quiltSize);
   JFrame myFrame = new JFrame("QuiltGrabber");
-  myFrame.setBounds(0,0,bimg.getWidth(), bimg.getHeight() + 500);
+  myFrame.setBounds(0,0,1000, 1000 + 800);
 
   JFXPanel dqPanel = new JFXPanel();
 
@@ -55,21 +61,6 @@ public class QuiltGrabber {
   Button button3x3 = new Button ("", icon3x3);
   Button button4x4 = new Button ("", icon4x4);
 
-  // grouping buttons together for placement
-  HBox gridButtons = new HBox(15, button2x2, button3x3, button4x4);
-  gridButtons.setAlignment(Pos.CENTER);
-
-  // instructional label for buttons
-  Label gridLabel = new Label("Select Your Quilt Block Sizing");
-  gridLabel.setFont(new Font("Arial", 18));
-   
-  // grouping buttons and label for placement
-  VBox gridSizing = new VBox(8, gridLabel, gridButtons);
-  gridSizing.setAlignment(Pos.CENTER);
-
-  Scene scene = new Scene(gridSizing);
-  dqPanel.setScene(scene);
-
   // giving each button the ability to update quiltSize and change the displayed grid
   button2x2.setOnAction(e -> dqip.updateQuiltSize(2));
   button3x3.setOnAction(e -> dqip.updateQuiltSize(3));
@@ -79,5 +70,52 @@ public class QuiltGrabber {
   // javafx.application.Platform.runLater(() -> {
   // });
 
+  // create a File chooser
+  FileChooser fileChooser = new FileChooser();
+
+  fileChooser.setTitle("Open Image File");
+
+  // create a Button
+  Button openFile = new Button("Choose File");
+
+  // create an Event Handler
+  openFile.setOnAction(new EventHandler<ActionEvent>() {
+
+    public void handle(ActionEvent e) {
+      Window stage = openFile.getScene().getWindow();
+
+      // get the file selected
+      File file = fileChooser.showOpenDialog(stage);
+      if (file != null) {
+        try {
+          // Load image
+          BufferedImage newBimg = ImageIO.read(file);
+          newBimg = ImageResize.resize(newBimg, 900);
+          dqip.updateImage(newBimg); 
+                            
+          myFrame.setBounds(0, 0, newBimg.getWidth(), newBimg.getHeight() + 800);
+                            
+          myFrame.revalidate();
+          myFrame.repaint();
+        } catch (Exception e2) {
+          e2.printStackTrace();
+        }
+      }
+    }
+  });
+    // grouping buttons together for placement
+  HBox gridButtons = new HBox(15, button2x2, button3x3, button4x4);
+  gridButtons.setAlignment(Pos.CENTER);
+
+  // instructional label for buttons
+  Label gridLabel = new Label("Select Your Quilt Block Sizing");
+  gridLabel.setFont(new Font("Arial", 18));
+   
+  // grouping buttons and label for placement
+  VBox gridSizing = new VBox(8, gridLabel, gridButtons, openFile);
+  gridSizing.setAlignment(Pos.CENTER);
+
+  Scene scene = new Scene(gridSizing);
+  dqPanel.setScene(scene);
  }
 }
