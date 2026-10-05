@@ -187,6 +187,53 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         }
     }
 
+    // This should be the method that actually saves the quilt block.
+    // Saving the files doesn't need to be associated with clicks in the interface...
+    // a button would work instead
+    public void saveQuiltBlock (String blockName) {
+        System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
+
+        DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
+
+        Homography h = new Homography();
+
+        String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
+
+        String savePath = "./" + blockName + ".xml.gz";
+        String grabPNGSavePath = "./QuiltGrab-" + blockName + ".png";
+        String quiltPNGSavePath = "./" + blockName + ".png";
+
+        System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
+        try (FileOutputStream fileStream = new FileOutputStream(savePath);
+            GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)) {
+
+            byte[] xmlBytes = compiledXMLPayload.getBytes(StandardCharsets.UTF_8);
+            // this line converts the string to bytes and compresses them
+
+            gzipStream.write(xmlBytes);
+
+            gzipStream.finish();
+
+            LoadXML loader = new LoadXML(savePath);
+            Block translatedBlock = loader.getCurrentBlock();
+
+            DQGeneratePNG.saveGrabAsPNG(this, grabPNGSavePath);
+
+            DQGeneratePNG.saveQuiltAsPNG(translatedBlock, this.quiltSize, quiltPNGSavePath);
+
+            // // Instantly writes the exact byte footprint profile directly down to the hard drive path
+            // Files.write(Paths.get(savePath), compiledXMLPayload.getBytes(), 
+            //             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            // System.out.println(" SUCCESS: DIGIQUILT XML SAVED!");
+            // System.out.println(" Location: " + savePath);
+
+        } catch (Exception exception) {
+            System.err.println("ERROR: FAILED TO SAVE FILE");
+            exception.printStackTrace();
+        }
+    }
+
 
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == e.BUTTON1) // left mouse click
@@ -216,47 +263,7 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             System.out.println("Selected point:" + corners[0][index-1] + "," + corners[1][index-1]);
         
             if (index ==4) {
-                System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
-
-                DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
-
-                Homography h = new Homography();
-
-                String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
-
-                String savePath = "./" + blockName + ".xml.gz";
-                String grabPNGSavePath = "./QuiltGrab-" + blockName + ".png";
-                String quiltPNGSavePath = "./" + blockName + ".png";
-
-                System.out.println("\nSUCCESS DIGIQUILT XML COMPRESSED AND SAVED");
-                try (FileOutputStream fileStream = new FileOutputStream(savePath);
-                    GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)) {
-
-                    byte[] xmlBytes = compiledXMLPayload.getBytes(StandardCharsets.UTF_8);
-                    // this line converts the string to bytes and compresses them
-
-                    gzipStream.write(xmlBytes);
-
-                    gzipStream.finish();
-
-                    LoadXML loader = new LoadXML(savePath);
-                    Block translatedBlock = loader.getCurrentBlock();
-
-                    DQGeneratePNG.saveGrabAsPNG(this, grabPNGSavePath);
-
-                    DQGeneratePNG.saveQuiltAsPNG(translatedBlock, this.quiltSize, quiltPNGSavePath);
-
-                // // Instantly writes the exact byte footprint profile directly down to the hard drive path
-                // Files.write(Paths.get(savePath), compiledXMLPayload.getBytes(), 
-                //             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                
-                // System.out.println(" SUCCESS: DIGIQUILT XML SAVED!");
-                // System.out.println(" Location: " + savePath);
-
-                }catch (Exception exception) {
-                System.err.println("ERROR: FAILED TO SAVE FILE");
-                exception.printStackTrace();
-            }
+                this.saveQuiltBlock(blockName);
             }
         }
         repaint();
