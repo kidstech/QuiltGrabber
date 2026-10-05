@@ -103,7 +103,30 @@ public class QuiltGrabber {
       }
     }
   });
-    // grouping buttons together for placement
+
+  Button saveQuilt = new Button("Save Quilt Block");
+
+    // block naming setup
+    // until we implement a textbox for users to name their own quilts?
+    String prefix = "Translated-Quilt-";
+    int count = 1;
+    File file;
+
+    // finding first available file name (number)
+    while (true) {
+      String fileName = prefix + count + ".xml.gz";
+      file = new File(fileName);
+      if (!file.exists()) {
+        break; // Found an available number
+      }
+      count++;
+    }
+
+    String blockName = prefix + count;
+
+  saveQuilt.setOnAction(e -> dqip.saveQuiltBlock(blockName));
+
+  // grouping buttons together for placement
   HBox gridButtons = new HBox(15, button2x2, button3x3, button4x4);
   gridButtons.setAlignment(Pos.CENTER);
 

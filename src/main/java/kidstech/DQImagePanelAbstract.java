@@ -240,31 +240,31 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         {
             if (index == 4) index = 0;
 
-            // blockName setup
-                String prefix = "Translated-Quilt-";
-                int count = 1;
-                File file;
+            // // blockName setup
+            //     String prefix = "Translated-Quilt-";
+            //     int count = 1;
+            //     File file;
 
-                // finding first available file name (number)
-                while (true) {
-                    String fileName = prefix + count + ".xml.gz";
-                    file = new File(fileName);
-                if (!file.exists()) {
-                    break; // Found an available number
-                }
-                count++;
-                }
+            //     // finding first available file name (number)
+            //     while (true) {
+            //         String fileName = prefix + count + ".xml.gz";
+            //         file = new File(fileName);
+            //     if (!file.exists()) {
+            //         break; // Found an available number
+            //     }
+            //     count++;
+            //     }
 
-                String blockName = prefix + count;
+            //     String blockName = prefix + count;
 
             corners[0][index] = e.getX();
             corners[1][index] = e.getY();
             index = index+1;
             System.out.println("Selected point:" + corners[0][index-1] + "," + corners[1][index-1]);
         
-            if (index ==4) {
-                this.saveQuiltBlock(blockName);
-            }
+            // if (index ==4) {
+            //     this.saveQuiltBlock(blockName);
+            // }
         }
         repaint();
     }
