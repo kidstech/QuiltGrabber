@@ -28,6 +28,7 @@ public class QuiltGrabber {
   BufferedImage bimg = null;
   // quiltSize is number of patches per one side of the quilt (standard DigiQuilt sizes are 2x2, 3x3, 4x4)
   quiltSize = 4; // default
+  
   // try {
   //   bimg = ImageIO.read( new File("src/test/resources/QuiltPhotos/IMG_1929.JPG"));
   //   bimg = ImageResize.resize(bimg, 1000);
@@ -133,9 +134,12 @@ public class QuiltGrabber {
   // instructional label for buttons
   Label gridLabel = new Label("Select Your Quilt Block Sizing");
   gridLabel.setFont(new Font("Arial", 18));
+
+  HBox fileOptions = new HBox(15, chooseFile, saveQuilt);
+  fileOptions.setAlignment(Pos.CENTER);
    
   // grouping buttons and label for placement
-  VBox gridSizing = new VBox(8, gridLabel, gridButtons, openFile);
+  VBox gridSizing = new VBox(8, gridLabel, gridButtons, fileOptions);
   gridSizing.setAlignment(Pos.CENTER);
 
   Scene scene = new Scene(gridSizing);
