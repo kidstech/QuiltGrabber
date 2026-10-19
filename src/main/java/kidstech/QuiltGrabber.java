@@ -7,19 +7,26 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import javafx.embed.swing.JFXPanel;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
+import kidstech.pngGeneration.DQGeneratePNG;
+import kidstech.pngGeneration.LoadXML;
+import kidstech.quiltObjects.Block;
 public class QuiltGrabber {
 
  private static int quiltSize;
@@ -106,26 +113,44 @@ public class QuiltGrabber {
   });
 
   Button saveQuilt = new Button("Save Quilt Block");
+  saveQuilt.setOnAction(new EventHandler<ActionEvent>() {
+    public void handle(ActionEvent e) {
+      Stage saveWindow = new Stage();
 
-    // block naming setup
-    // until we implement a textbox for users to name their own quilts?
-    String prefix = "Translated-Quilt-";
-    int count = 1;
-    File file;
+      String tempBlockName = "tempBlockName";
 
-    // finding first available file name (number)
-    while (true) {
-      String fileName = prefix + count + ".xml.gz";
-      file = new File(fileName);
-      if (!file.exists()) {
-        break; // Found an available number
-      }
-      count++;
+      java.awt.image.BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, quiltSize);
+
+      Image quiltBlock = SwingFXUtils.toFXImage(bufferedImg, null);
+      ImageView quiltBlockPreview = new ImageView(quiltBlock);
+
+      Label blockNameLabel = new Label("Block Name:");
+      TextField quiltBlockName = new TextField();
+
+      quiltBlockName.setPromptText("Block Name...");
+
+      Button confirmSave = new Button("Save");
+
+        confirmSave.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e) {
+            String confirmedBlockName = quiltBlockName.getText();
+
+            if (!confirmedBlockName.isEmpty()){
+              dqip.saveQuiltBlock(confirmedBlockName);
+              saveWindow.close();
+            }
+          }
+        });
+      VBox saveOptions = new VBox(10, quiltBlockPreview, blockNameLabel, quiltBlockName, confirmSave);
+      saveOptions.setAlignment(Pos.CENTER);
+      saveOptions.setPadding(new Insets(20));
+
+      Scene saveScene = new Scene(saveOptions);
+      saveWindow.setScene(saveScene);
+      saveWindow.show();
     }
-
-    String blockName = prefix + count;
-
-  saveQuilt.setOnAction(e -> dqip.saveQuiltBlock(blockName));
+    
+  });
 
   // grouping buttons together for placement
   HBox gridButtons = new HBox(15, button2x2, button3x3, button4x4);
