@@ -116,10 +116,23 @@ public class QuiltGrabber {
   saveQuilt.setOnAction(new EventHandler<ActionEvent>() {
     public void handle(ActionEvent e) {
       Stage saveWindow = new Stage();
-
       String tempBlockName = "tempBlockName";
 
-      java.awt.image.BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, quiltSize);
+      Block tempBlock = dqip.translateQuiltBlock(tempBlockName);
+
+      if (tempBlock == null) {
+          System.err.println("Quilt block could not be generated");
+          return;
+      }
+
+      int selectedQuiltSize = dqip.getQuiltSize();
+
+      java.awt.image.BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, selectedQuiltSize);
+
+      if (bufferedImg == null) {
+        System.err.println("Preview could not be generated");
+        return;
+      }
 
       Image quiltBlock = SwingFXUtils.toFXImage(bufferedImg, null);
       ImageView quiltBlockPreview = new ImageView(quiltBlock);
@@ -136,7 +149,7 @@ public class QuiltGrabber {
             String confirmedBlockName = quiltBlockName.getText();
 
             if (!confirmedBlockName.isEmpty()){
-              dqip.saveQuiltBlock(confirmedBlockName);
+              dqip.saveQuiltBlock(confirmedBlockName, tempBlock);
               saveWindow.close();
             }
           }
