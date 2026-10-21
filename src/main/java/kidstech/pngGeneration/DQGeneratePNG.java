@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLayeredPane;
@@ -102,9 +103,45 @@ public class DQGeneratePNG {
             System.err.println("Failed to generate Quilt PNG file");
             e.printStackTrace();
         }
-
     }
 
+    public static BufferedImage generateQuiltPNG (Block block, int quiltSize) {
+        if (block == null) {
+            System.err.println("Block is null");
+        } 
+        int sideSize = block.getSideSize();
+        int patchPixelSize = 200;
+        int totalPixelDimension = sideSize * patchPixelSize;
+        Dimension picSize = new Dimension(totalPixelDimension, totalPixelDimension);
+
+        BlockViewer quiltViewer = new BlockViewer(block, patchPixelSize);
+        GridViewPanel gridOverlay = new GridViewPanel(sideSize, patchPixelSize);
+        
+        int dynamicGridLines = quiltSize;
+        Grid dynamicGrid = new Grid(dynamicGridLines, dynamicGridLines, 0, 0);
+        gridOverlay.setGrid(dynamicGrid);
+
+        quiltViewer.setBounds(0, 0, totalPixelDimension, totalPixelDimension);
+        gridOverlay.setBounds(0, 0, totalPixelDimension, totalPixelDimension);
+
+        if (dynamicGrid != null) {
+            gridOverlay.setGrid(dynamicGrid);
+        }
+
+        JLayeredPane pic = new JLayeredPane();
+        pic.setPreferredSize(picSize);
+
+        pic.add(quiltViewer, JLayeredPane.DEFAULT_LAYER);
+        pic.add(gridOverlay, JLayeredPane.PALETTE_LAYER);
+
+        pic.setSize(picSize);
+        pic.doLayout();
+        subComponentLayout(pic);
+        pic.validate();
+
+        BufferedImage image = generatePNG(pic);
+        return image;
+    }
 
     // forces layout to be larger than 0 pixels even though image generating isn't being done on screen
     public static void subComponentLayout (Component component) {
