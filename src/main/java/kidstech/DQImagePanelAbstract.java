@@ -191,10 +191,40 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         }
     }
 
+    public Block translateQuiltBlock (String blockName) {
+        DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
+        
+        Homography h = new Homography();
+
+        String compiledXMLPayload = translator.buildQuiltXML(this.image, this.corners, h);
+        
+        try {
+            File tempFile = File.createTempFile(blockName, ".xml.gz");
+            tempFile.deleteOnExit();
+
+            try (FileOutputStream fileStream = new FileOutputStream(tempFile);
+                GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream)){
+                byte[] xmlBytes = compiledXMLPayload.getBytes(StandardCharsets.UTF_8);
+                // this line converts the string to bytes and compresses them
+
+                gzipStream.write(xmlBytes);
+                gzipStream.finish();
+                LoadXML loader = new LoadXML(tempFile.getAbsolutePath());
+                Block translatedBlock = loader.getCurrentBlock();
+
+                return translatedBlock;
+            }
+        } catch (Exception exception) {
+            System.err.println("ERROR: FAILED TO SAVE FILE");
+            exception.printStackTrace();
+            return null;
+        } 
+    }
+
     // This should be the method that actually saves the quilt block.
     // Saving the files doesn't need to be associated with clicks in the interface...
     // a button would work instead
-    public void saveQuiltBlock (String blockName) {
+    public void saveQuiltBlock (String blockName, Block translatedBlock) {
         System.out.println("GENERATING DIGIQUILT COMPATIBLE XML");
 
         DQTranslateXML translator = new DQTranslateXML(this.quiltSize, "QuiltGrabber", blockName);
@@ -217,9 +247,6 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
             gzipStream.write(xmlBytes);
 
             gzipStream.finish();
-
-            LoadXML loader = new LoadXML(savePath);
-            Block translatedBlock = loader.getCurrentBlock();
 
             DQGeneratePNG.saveGrabAsPNG(this, grabPNGSavePath);
 
