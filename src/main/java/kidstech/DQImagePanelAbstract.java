@@ -48,6 +48,10 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         }
     }
 
+    public int getQuiltSize() {
+        return this.quiltSize;
+    }
+
     // interacting with gridIcons in the QuiltGrabber interface should update the quiltSize value
     // This method updates the quiltSize value within the DQImagePanelAbstract object
     public void updateQuiltSize(int newSize) {
