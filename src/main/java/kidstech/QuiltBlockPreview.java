@@ -34,13 +34,15 @@ public class QuiltBlockPreview {
     public void display() {
         String tempBlockName = "tempBlockName";
         Block tempBlock = dqip.translateQuiltBlock(tempBlockName);
+        int selectedQuiltSize = dqip.getQuiltSize();
+
 
         if (tempBlock == null) {
           System.err.println("Quilt block could not be generated");
           return;
         } 
 
-        int selectedQuiltSize = dqip.getQuiltSize();
+        // generate DigiQuilt Preview Quilt Block
 
         BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, selectedQuiltSize);
 
