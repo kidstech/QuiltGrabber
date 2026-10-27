@@ -43,19 +43,33 @@ public class QuiltBlockPreview {
         } 
 
         // generate DigiQuilt Preview Quilt Block
+        BufferedImage previewBufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, selectedQuiltSize);
 
-        BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, selectedQuiltSize);
-
-        if (bufferedImg == null) {
+        if (previewBufferedImg == null) {
             System.err.println("Preview could not be generated");
             return;
         }
 
-        Image quiltBlock = SwingFXUtils.toFXImage(bufferedImg, null);
+        Image quiltBlock = SwingFXUtils.toFXImage(previewBufferedImg, null);
         ImageView quiltBlockPreview = new ImageView(quiltBlock);
 
         quiltBlockPreview.setFitHeight(500);
         quiltBlockPreview.setFitWidth(500);
+
+        // generate QuiltGrab
+        BufferedImage quiltGrabBufferedImage = DQGeneratePNG.generatePNG(dqip);
+
+        if (quiltGrabBufferedImage == null) {
+            System.err.println("Quilt Grab could not be generated");
+            return;
+        }
+
+        Image quiltGrab = SwingFXUtils.toFXImage(quiltGrabBufferedImage, null);
+        ImageView quiltGrabImageView = new ImageView(quiltGrab);
+
+        // logic from ImageResize but for ImageView
+        quiltGrabImageView.setFitHeight(500);
+        quiltGrabImageView.setFitWidth((quiltGrab.getWidth() * 500) / quiltGrab.getHeight());
 
         Label blockNameLabel = new Label("Block Name:");
         TextField quiltBlockName = new TextField();
@@ -87,7 +101,11 @@ public class QuiltBlockPreview {
         saveSelectOptions.setAlignment(Pos.CENTER);
 
         // set up save options
-        VBox saveOptions = new VBox(10, quiltBlockPreview, blockNameLabel, quiltBlockName, saveSelectOptions);
+        
+        HBox quiltBlockImages = new HBox(quiltGrabImageView, quiltBlockPreview);
+        quiltBlockImages.setAlignment(Pos.CENTER);
+
+        VBox saveOptions = new VBox(10, quiltBlockImages, blockNameLabel, quiltBlockName, saveSelectOptions);
         saveOptions.setAlignment(Pos.CENTER);
         saveOptions.setPadding(new Insets(20));
 
