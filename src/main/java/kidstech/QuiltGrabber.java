@@ -114,7 +114,7 @@ public class QuiltGrabber {
           newBimg = ImageResize.resize(newBimg, 900);
           dqip.updateImage(newBimg); 
                             
-          myFrame.setBounds(0, 0, newBimg.getWidth(), newBimg.getHeight() + 800);
+          myFrame.setBounds(100, 100, newBimg.getWidth(), newBimg.getHeight() + 200);
                             
           myFrame.revalidate();
           myFrame.repaint();
