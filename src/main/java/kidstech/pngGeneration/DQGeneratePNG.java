@@ -55,44 +55,10 @@ public class DQGeneratePNG {
     }
 
     public static void saveQuiltAsPNG (Block block, int quiltSize, String outputFilePath) {
-        if (block == null) {
-            System.err.println("Block is null");
-            return;
-        }
-        
-        try {
-            int sideSize = block.getSideSize();
-            int patchPixelSize = 200;
-            int totalPixelDimension = sideSize * patchPixelSize;
-            Dimension picSize = new Dimension(totalPixelDimension, totalPixelDimension);
+        try { 
+            BufferedImage image = generateQuiltPNG(block, quiltSize);
 
-            BlockViewer quiltViewer = new BlockViewer(block, patchPixelSize);
-            GridViewPanel gridOverlay = new GridViewPanel(sideSize, patchPixelSize);
-            
-            int dynamicGridLines = quiltSize;
-            Grid dynamicGrid = new Grid(dynamicGridLines, dynamicGridLines, 0, 0);
-            gridOverlay.setGrid(dynamicGrid);
-
-            quiltViewer.setBounds(0, 0, totalPixelDimension, totalPixelDimension);
-            gridOverlay.setBounds(0, 0, totalPixelDimension, totalPixelDimension);
-
-            if (dynamicGrid != null) {
-                gridOverlay.setGrid(dynamicGrid);
-            }
-
-            JLayeredPane pic = new JLayeredPane();
-            pic.setPreferredSize(picSize);
-
-            pic.add(quiltViewer, JLayeredPane.DEFAULT_LAYER);
-            pic.add(gridOverlay, JLayeredPane.PALETTE_LAYER);
-
-            pic.setSize(picSize);
-            pic.doLayout();
-            subComponentLayout(pic);
-
-            BufferedImage image = generatePNG(pic);
             File outputFile = new File(outputFilePath);
-
 
             if (ImageIO.write(image, "png", outputFile)) {
                 System.out.println("Quilt PNG successfully saved as: " + outputFilePath);
@@ -137,9 +103,9 @@ public class DQGeneratePNG {
         pic.setSize(picSize);
         pic.doLayout();
         subComponentLayout(pic);
-        pic.validate();
 
         BufferedImage image = generatePNG(pic);
+
         return image;
     }
 
