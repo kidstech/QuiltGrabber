@@ -143,6 +143,9 @@ public class QuiltGrabber {
       Image quiltBlock = SwingFXUtils.toFXImage(bufferedImg, null);
       ImageView quiltBlockPreview = new ImageView(quiltBlock);
 
+      quiltBlockPreview.setFitHeight(500);
+      quiltBlockPreview.setFitWidth(500);
+
       Label blockNameLabel = new Label("Block Name:");
       TextField quiltBlockName = new TextField();
 
