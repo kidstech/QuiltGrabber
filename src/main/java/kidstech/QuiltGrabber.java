@@ -50,14 +50,20 @@ public class QuiltGrabber {
   JFrame myFrame = new JFrame("QuiltGrabber");
   myFrame.setBounds(0,0,1000, 1000 + 800);
 
-  JFXPanel dqPanel = new JFXPanel();
+  JFXPanel sizingPanel = new JFXPanel();
+
+  JFXPanel instructionPanel = new JFXPanel();
 
   // set up for QuiltGrab panel and control panel
   myFrame.setLayout(new BorderLayout());
-  myFrame.add(dqPanel, BorderLayout.SOUTH); // javafx
+  myFrame.add(sizingPanel, BorderLayout.SOUTH); // javafx
+  myFrame.add(instructionPanel, BorderLayout.NORTH); // javafx
   myFrame.add(dqip, BorderLayout.CENTER); // swing
   myFrame.setVisible(true);
   myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+  // south selection panel
 
   // grid icons from DigiQuilt
   ImageView icon2x2 = new ImageView(new Image("file:src/main/java/resources/icons/2x2.png"));
@@ -180,7 +186,21 @@ public class QuiltGrabber {
   VBox gridSizing = new VBox(8, gridLabel, gridButtons, fileOptions);
   gridSizing.setAlignment(Pos.CENTER);
 
-  Scene scene = new Scene(gridSizing);
-  dqPanel.setScene(scene);
+  Scene selectionScene = new Scene(gridSizing);
+  sizingPanel.setScene(selectionScene);
+
+
+  // north instructions panel 
+  Label instr1 = new Label("Click each corner of your Quilt Block");
+  instr1.setFont(new Font("Arial", 18));
+
+  Label instr2 = new Label("Start at the top left and work your way Clockwise");
+  instr2.setFont(new Font("Arial", 18));
+
+  VBox instructions = new VBox(instr1, instr2);
+  instructions.setAlignment(Pos.CENTER);
+
+  Scene instructionScene = new Scene(instructions);
+  instructionPanel.setScene(instructionScene);
  }
 }
