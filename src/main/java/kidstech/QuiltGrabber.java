@@ -84,6 +84,14 @@ public class QuiltGrabber {
   // javafx.application.Platform.runLater(() -> {
   // });
 
+  // close Quilt Grabber
+  Button exitQG = new Button("Exit");
+  exitQG.setOnAction(new EventHandler<ActionEvent>() {
+    public void handle(ActionEvent e) {
+      myFrame.dispose();
+    }
+  });
+
   // create a File chooser
   FileChooser fileChooser = new FileChooser();
 
@@ -182,7 +190,7 @@ public class QuiltGrabber {
   Label gridLabel = new Label("Select Your Quilt Block Sizing");
   gridLabel.setFont(new Font("Arial", 18));
 
-  HBox fileOptions = new HBox(15, chooseFile, saveQuilt);
+  HBox fileOptions = new HBox(15, exitQG, chooseFile, saveQuilt);
   fileOptions.setAlignment(Pos.CENTER);
    
   // grouping buttons and label for placement
