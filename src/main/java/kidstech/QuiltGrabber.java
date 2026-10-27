@@ -1,6 +1,5 @@
 package kidstech;
 import java.awt.BorderLayout;
-import java.awt.Desktop.Action;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -127,70 +126,13 @@ public class QuiltGrabber {
   });
 
   Button saveQuilt = new Button("Save Quilt Block");
+
+  // enter window from QuiltBlockPreview.java
   saveQuilt.setOnAction(new EventHandler<ActionEvent>() {
     public void handle(ActionEvent e) {
-      Stage saveWindow = new Stage();
-      String tempBlockName = "tempBlockName";
-
-      Block tempBlock = dqip.translateQuiltBlock(tempBlockName);
-
-      if (tempBlock == null) {
-          System.err.println("Quilt block could not be generated");
-          return;
-      }
-
-      int selectedQuiltSize = dqip.getQuiltSize();
-
-      java.awt.image.BufferedImage bufferedImg = DQGeneratePNG.generateQuiltPNG(tempBlock, selectedQuiltSize);
-
-      if (bufferedImg == null) {
-        System.err.println("Preview could not be generated");
-        return;
-      }
-
-      Image quiltBlock = SwingFXUtils.toFXImage(bufferedImg, null);
-      ImageView quiltBlockPreview = new ImageView(quiltBlock);
-
-      quiltBlockPreview.setFitHeight(500);
-      quiltBlockPreview.setFitWidth(500);
-
-      Label blockNameLabel = new Label("Block Name:");
-      TextField quiltBlockName = new TextField();
-
-      quiltBlockName.setPromptText("Block Name...");
-
-      Button confirmSave = new Button("Save");
-      Button exit = new Button("Exit");
-
-        confirmSave.setOnAction(new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e) {
-            String confirmedBlockName = quiltBlockName.getText();
-
-            if (!confirmedBlockName.isEmpty()){
-              dqip.saveQuiltBlock(confirmedBlockName, tempBlock);
-              saveWindow.close();
-            }
-          }
-        });
-
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e) {
-            saveWindow.close();
-          }
-        });
-
-      HBox saveSelectOptions = new HBox(8, exit, confirmSave);
-      saveSelectOptions.setAlignment(Pos.CENTER);
-
-      VBox saveOptions = new VBox(10, quiltBlockPreview, blockNameLabel, quiltBlockName, saveSelectOptions);
-      saveOptions.setAlignment(Pos.CENTER);
-      saveOptions.setPadding(new Insets(20));
-
-      Scene saveScene = new Scene(saveOptions);
-      saveWindow.setScene(saveScene);
-      saveWindow.show();
+      QuiltBlockPreview saveWindow = new QuiltBlockPreview(dqip);
+      saveWindow.display();
     }
-    
   });
 
   // grouping buttons together for placement
