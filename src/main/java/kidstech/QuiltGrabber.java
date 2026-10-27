@@ -1,5 +1,6 @@
 package kidstech;
 import java.awt.BorderLayout;
+import java.awt.Desktop.Action;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -25,7 +26,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import kidstech.pngGeneration.DQGeneratePNG;
-import kidstech.pngGeneration.LoadXML;
 import kidstech.quiltObjects.Block;
 public class QuiltGrabber {
 
@@ -160,6 +160,7 @@ public class QuiltGrabber {
       quiltBlockName.setPromptText("Block Name...");
 
       Button confirmSave = new Button("Save");
+      Button exit = new Button("Exit");
 
         confirmSave.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e) {
@@ -171,7 +172,17 @@ public class QuiltGrabber {
             }
           }
         });
-      VBox saveOptions = new VBox(10, quiltBlockPreview, blockNameLabel, quiltBlockName, confirmSave);
+
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e) {
+            saveWindow.close();
+          }
+        });
+
+      HBox saveSelectOptions = new HBox(8, exit, confirmSave);
+      saveSelectOptions.setAlignment(Pos.CENTER);
+
+      VBox saveOptions = new VBox(10, quiltBlockPreview, blockNameLabel, quiltBlockName, saveSelectOptions);
       saveOptions.setAlignment(Pos.CENTER);
       saveOptions.setPadding(new Insets(20));
 
