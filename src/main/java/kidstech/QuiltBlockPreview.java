@@ -1,6 +1,7 @@
 package kidstech;
 
 import java.awt.image.BufferedImage;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,8 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import kidstech.pngGeneration.DQGeneratePNG;
 import kidstech.quiltObjects.Block;
@@ -57,7 +62,7 @@ public class QuiltBlockPreview {
         quiltBlockPreview.setFitWidth(500);
 
         // generate QuiltGrab
-        BufferedImage quiltGrabBufferedImage = DQGeneratePNG.generatePNG(dqip);
+        BufferedImage quiltGrabBufferedImage = DQGeneratePNG.generateGrabPNG(dqip);
 
         if (quiltGrabBufferedImage == null) {
             System.err.println("Quilt Grab could not be generated");
@@ -70,6 +75,23 @@ public class QuiltBlockPreview {
         // logic from ImageResize but for ImageView
         quiltGrabImageView.setFitHeight(500);
         quiltGrabImageView.setFitWidth((quiltGrab.getWidth() * 500) / quiltGrab.getHeight());
+
+        Pane previewPane = new Pane(quiltBlockPreview);
+        Circle previewCursor = createCursor();
+        previewPane.getChildren().add(previewCursor);
+
+        Pane quiltGrabPane = new Pane(quiltGrabImageView);
+        Circle quiltGrabCursor = createCursor();
+        quiltGrabPane.getChildren().add(quiltGrabCursor);
+
+        quiltGrabPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> updateCursors(e, quiltGrabCursor, previewCursor));
+        quiltGrabPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> updateCursors(e, quiltGrabCursor, previewCursor));
+
+        previewPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> updateCursors(e, previewCursor, quiltGrabCursor));
+        previewPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> updateCursors(e, previewCursor, quiltGrabCursor));
+
+        quiltGrabPane.setOnMouseEntered(e -> { quiltGrabCursor.setVisible(true); previewCursor.setVisible(true); });
+        previewPane.setOnMouseEntered(e -> { quiltGrabCursor.setVisible(true); previewCursor.setVisible(true); });
 
         Label blockNameLabel = new Label("Block Name:");
         TextField quiltBlockName = new TextField();
@@ -102,7 +124,8 @@ public class QuiltBlockPreview {
 
         // set up save options
         
-        HBox quiltBlockImages = new HBox(quiltGrabImageView, quiltBlockPreview);
+        // HBox quiltBlockImages = new HBox(quiltGrabImageView, quiltBlockPreview);
+        HBox quiltBlockImages = new HBox(quiltGrabPane, previewPane);
         quiltBlockImages.setAlignment(Pos.CENTER);
 
         VBox saveOptions = new VBox(10, quiltBlockImages, blockNameLabel, quiltBlockName, saveSelectOptions);
@@ -112,5 +135,20 @@ public class QuiltBlockPreview {
         Scene saveScene = new Scene(saveOptions);
         saveWindow.setScene(saveScene);
         saveWindow.show();
+    }
+
+    private Circle createCursor() {
+        Circle circle = new Circle(5);
+        circle.setVisible(false);
+        circle.setMouseTransparent(true);
+        return circle;
+    }
+
+    private void updateCursors(MouseEvent e, Circle activeCursor, Circle mirroredCursor) {
+        activeCursor.setCenterX(e.getX());
+        activeCursor.setCenterY(e.getY());
+
+        mirroredCursor.setCenterX(e.getX());
+        mirroredCursor.setCenterY(e.getY());
     }
 }
