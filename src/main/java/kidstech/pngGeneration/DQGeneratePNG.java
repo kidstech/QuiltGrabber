@@ -9,10 +9,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLayeredPane;
 
+import kidstech.DQImagePanelAbstract;
 import kidstech.quiltObjects.Block;
 import kidstech.quiltObjects.Grid;
 
@@ -38,9 +40,46 @@ public class DQGeneratePNG {
         return myImage;
     }
 
-    public static void saveGrabAsPNG (Component myComponent, String outputFilePath) {
+    public static BufferedImage generateGrabPNG (DQImagePanelAbstract dqip) {
+        BufferedImage image = generatePNG(dqip);
+        // coords for cropping quilt grab
+            int[][] corners = dqip.getCorners();
+
+            // top left
+            int topLeftX = corners[0][0];
+            int topLeftY = corners[1][0];
+
+            // top right
+            int topRightX = corners[0][1];
+            int topRightY = corners[1][1];
+
+            // bottom right
+            int botRightX = corners[0][2];
+            int botRightY = corners[1][2];
+
+            // bottom left
+            int botLeftX = corners[0][3];
+            int botLeftY = corners[1][3];
+
+            // min and max values
+            int minX = Math.min(topLeftX, botLeftX);
+            int minY = Math.min(topLeftY, topRightY);
+            int maxX = Math.max(topRightX, botRightX);
+            int maxY = Math.max(botLeftY, botRightY);
+
+            // width and height values
+            int width = maxX - minX;
+            int height = maxY - minY;
+
+            int minDimension = Math.min(width, height);
+
+            // crop image
+            return image.getSubimage(minX, minY, minDimension, minDimension);
+    }
+
+    public static void saveGrabAsPNG (DQImagePanelAbstract dqip, String outputFilePath) {
         try {
-            BufferedImage image = generatePNG(myComponent);
+            BufferedImage image = generateGrabPNG(dqip);
             File outputFile = new File(outputFilePath);
 
             if (ImageIO.write(image, "png", outputFile)) {
