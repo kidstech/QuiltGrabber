@@ -1,5 +1,6 @@
 package kidstech;
 import java.awt.BorderLayout;
+import java.awt.Desktop.Action;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -91,6 +92,15 @@ public class QuiltGrabber {
     }
   });
 
+  Button clearHomography = new Button ("Clear");
+
+  clearHomography.setOnAction(new EventHandler<ActionEvent>() {
+    public void handle(ActionEvent e) {
+      dqip.setIndex(0);
+      dqip.repaint();
+    }
+  });
+
   // create a File chooser
   FileChooser fileChooser = new FileChooser();
 
@@ -143,7 +153,7 @@ public class QuiltGrabber {
   Label gridLabel = new Label("Select Your Quilt Block Sizing");
   gridLabel.setFont(new Font("Arial", 18));
 
-  HBox fileOptions = new HBox(15, exitQG, chooseFile, saveQuilt);
+  HBox fileOptions = new HBox(15, exitQG, clearHomography, chooseFile, saveQuilt);
   fileOptions.setAlignment(Pos.CENTER);
    
   // grouping buttons and label for placement

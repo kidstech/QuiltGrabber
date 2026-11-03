@@ -48,6 +48,10 @@ public class DQImagePanelAbstract extends JPanel implements MouseListener, Mouse
         }
     }
 
+    public void setIndex (int index) {
+        this.index = index;
+    }
+
     public int getQuiltSize() {
         return this.quiltSize;
     }
