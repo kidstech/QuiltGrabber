@@ -6,10 +6,16 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.utils.Converters;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
-import java.util.Arrays;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLayeredPane;
@@ -26,6 +32,11 @@ import kidstech.quiltObjects.Grid;
  */
 
 public class DQGeneratePNG {
+
+    static {
+        nu.pattern.OpenCV.loadLocally();
+    }
+
     public static BufferedImage generatePNG (Component myComponent) {
         // referenced from DigiQuilt blockSave code
         Dimension size = myComponent.getSize();
@@ -45,36 +56,55 @@ public class DQGeneratePNG {
         // coords for cropping quilt grab
             int[][] corners = dqip.getCorners();
 
+            // setting up corner points array
+            List<Point> cornerPoints = new ArrayList<>();
+
             // top left
-            int topLeftX = corners[0][0];
-            int topLeftY = corners[1][0];
-
+            cornerPoints.add(new Point(corners[0][0], corners[1][0]));
             // top right
-            int topRightX = corners[0][1];
-            int topRightY = corners[1][1];
-
+            cornerPoints.add(new Point(corners[0][1], corners[1][1]));
             // bottom right
-            int botRightX = corners[0][2];
-            int botRightY = corners[1][2];
-
+            cornerPoints.add(new Point(corners[0][2], corners[1][2]));
             // bottom left
-            int botLeftX = corners[0][3];
-            int botLeftY = corners[1][3];
+            cornerPoints.add(new Point(corners[0][3], corners[1][3]));
 
-            // min and max values
-            int minX = Math.min(topLeftX, botLeftX);
-            int minY = Math.min(topLeftY, topRightY);
-            int maxX = Math.max(topRightX, botRightX);
-            int maxY = Math.max(botLeftY, botRightY);
+            // converting image to a mat
+            BufferedImage byteImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            java.awt.Graphics2D g = byteImage.createGraphics();
+            g.drawImage(image, 0, 0, null);
+            byte[] pixels = ((DataBufferByte) byteImage.getRaster().getDataBuffer()).getData();
+            Mat imageMat = new Mat(byteImage.getHeight(), byteImage.getWidth(), CvType.CV_8UC3);
+            imageMat.put(0, 0, pixels);
 
-            // width and height values
-            int width = maxX - minX;
-            int height = maxY - minY;
+            // setting up frame points array
+            List<Point> framePoints = new ArrayList<>();
+            framePoints.add(new Point(0, 0));
+            framePoints.add(new Point(500, 0));
+            framePoints.add(new Point(500, 500));
+            framePoints.add(new Point(0, 500));
 
-            int minDimension = Math.min(width, height);
+            // converting array lists to mat
+            Mat cornerPointsMat = Converters.vector_Point2f_to_Mat(cornerPoints);
+            Mat framePointsMat = Converters.vector_Point2f_to_Mat(framePoints);
 
-            // crop image
-            return image.getSubimage(minX, minY, minDimension, minDimension);
+            // actual perspective warping action
+            Mat perspectiveTransform = Imgproc.getPerspectiveTransform(cornerPointsMat, framePointsMat);
+            Mat outputMat = new Mat();
+            Size frameSize = new Size(500, 500);
+            Imgproc.warpPerspective(imageMat, outputMat, perspectiveTransform, frameSize);
+
+            // converting the mat back to an image
+            int cols = outputMat.cols();
+            int rows = outputMat.rows();
+            int elemSize = (int)outputMat.elemSize();
+            byte[] data = new byte[cols * rows * elemSize];
+            outputMat.get(0, 0, data);
+            int type = outputMat.channels() == 1 ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
+            BufferedImage finalImage = new BufferedImage(cols, rows, type);
+
+            System.arraycopy(data, 0, ((DataBufferByte)finalImage.getRaster().getDataBuffer()).getData(), 0, data.length);
+            return finalImage;
+
     }
 
     public static void saveGrabAsPNG (DQImagePanelAbstract dqip, String outputFilePath) {
