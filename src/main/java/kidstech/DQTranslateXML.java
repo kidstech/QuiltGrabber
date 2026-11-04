@@ -1,8 +1,11 @@
 package kidstech;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import resources.Jama.Matrix;
 
@@ -36,27 +39,44 @@ public class DQTranslateXML {
         fabricPalette.put("BROWN", new Color(120, 90, 70));
     }
 
-    private String findClosestColor (Color imageColor) {
-
-        String closestColor = "TRANSPARENT";
-        double minDistance = Double.MAX_VALUE;
-
-        // Color distance calculation similar to dynamic closest color warping technique
-        // Check distance for each color and see which DigiQuilt color is closest to the observed color
-        for (Map.Entry<String, Color> entry: fabricPalette.entrySet()) {
+    private LinkedHashMap<String, Color> findClosestColors (Color imageColor) {
+        LinkedHashMap<String, Color> sortedColors = this.fabricPalette.entrySet().stream()
+        .sorted(Comparator.comparingDouble(entry -> {
             Color paletteColor = entry.getValue();
-            double distance = Math.sqrt(
+            return Math.sqrt(
                 Math.pow((imageColor.getRed() - 10 - paletteColor.getRed()),2) +
                 Math.pow((imageColor.getGreen() - 10 - paletteColor.getGreen()),2) +
                 Math.pow((imageColor.getBlue() - 10 - paletteColor.getBlue()),2)
             );
-            // reassigning closest color if a new smallest distance is found
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestColor = entry.getKey();
-            }
-        }
-        return closestColor;
+        }))
+        .collect(Collectors.toMap (
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            (oldValue, newValue) -> oldValue,
+            LinkedHashMap::new
+        ));
+
+        return sortedColors;
+
+        // String closestColor = "TRANSPARENT";
+        // double minDistance = Double.MAX_VALUE;
+
+        // // Color distance calculation similar to dynamic closest color warping technique
+        // // Check distance for each color and see which DigiQuilt color is closest to the observed color
+        // for (Map.Entry<String, Color> entry: fabricPalette.entrySet()) {
+        //     Color paletteColor = entry.getValue();
+        //     double distance = Math.sqrt(
+        //         Math.pow((imageColor.getRed() - 10 - paletteColor.getRed()),2) +
+        //         Math.pow((imageColor.getGreen() - 10 - paletteColor.getGreen()),2) +
+        //         Math.pow((imageColor.getBlue() - 10 - paletteColor.getBlue()),2)
+        //     );
+        //     // reassigning closest color if a new smallest distance is found
+        //     if (distance < minDistance) {
+        //         minDistance = distance;
+        //         closestColor = entry.getKey();
+        //     }
+        // }
+        // return closestColor;
     }
     // finding the center of a triangle in the grid to sample its color
     private String samplePixel (BufferedImage image, Point p1, Point p2, Point p3) {
@@ -68,7 +88,10 @@ public class DQTranslateXML {
         }
 
         Color triangleColor = new Color(image.getRGB(centerX,centerY));
-        return findClosestColor(triangleColor);
+
+        LinkedHashMap <String, Color> closestColors = findClosestColors(triangleColor);
+
+        return closestColors.entrySet().iterator().next().getKey();
     }
 
     // sampling a patch instead of a single pixel
@@ -105,7 +128,9 @@ public class DQTranslateXML {
             sumBlue/totalPixels
         );
 
-        return findClosestColor(averageColor);
+        LinkedHashMap <String, Color> closestColors = findClosestColors(averageColor);
+
+        return closestColors.entrySet().iterator().next().getKey();
     }
 
     //building the actual xml file for the quilt
