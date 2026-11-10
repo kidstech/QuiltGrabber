@@ -82,6 +82,7 @@ public class QuiltGrabber {
   exitQG.setOnAction(new EventHandler<ActionEvent>() {
     public void handle(ActionEvent e) {
       myFrame.dispose();
+      System.out.println("Exiting QuiltGrabber...");
     }
   });
 
@@ -91,6 +92,7 @@ public class QuiltGrabber {
     public void handle(ActionEvent e) {
       dqip.setIndex(0);
       dqip.repaint();
+      System.out.println("Clearing Selected Points...");
     }
   });
 
@@ -133,6 +135,7 @@ public class QuiltGrabber {
   // enter window from QuiltBlockPreview.java
   saveQuilt.setOnAction(new EventHandler<ActionEvent>() {
     public void handle(ActionEvent e) {
+      System.out.println("Entering Save Window...");
       QuiltBlockPreview saveWindow = new QuiltBlockPreview(dqip);
       saveWindow.display();
     }

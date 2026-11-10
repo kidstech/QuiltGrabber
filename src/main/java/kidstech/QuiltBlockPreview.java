@@ -116,6 +116,7 @@ public class QuiltBlockPreview {
         exit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 saveWindow.close();
+                System.out.println("Exiting Save Window...");
             }
         });
 
