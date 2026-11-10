@@ -94,19 +94,11 @@ public class QuiltBlockPreview {
         previewPane.setOnMouseEntered(e -> { quiltGrabCursor.setVisible(true); previewCursor.setVisible(true); });
 
         quiltGrabPane.setOnMouseClicked((MouseEvent click) -> {
-            // Get the X and Y coordinates relative to the Pane
-            double x = click.getX();
-            double y = click.getY();
-            
-            System.out.println("QuiltGrab Pane: " + "X= " + x + ", Y=" + y);
+            getClickCoords(click, quiltGrabPane);
         });
 
         previewPane.setOnMouseClicked((MouseEvent click) -> {
-            // Get the X and Y coordinates relative to the Pane
-            double x = click.getX();
-            double y = click.getY();
-            
-            System.out.println("Preview Pane: " + "X= " + x + ", Y=" + y);
+            getClickCoords(click, previewPane);
         });
 
         Label blockNameLabel = new Label("Block Name:");
@@ -167,5 +159,24 @@ public class QuiltBlockPreview {
 
         mirroredCursor.setCenterX(e.getX());
         mirroredCursor.setCenterY(e.getY());
+    }
+
+    private void getClickCoords (MouseEvent e, Pane pane) {
+            double clickedX = e.getX();
+            double clickedY = e.getY();
+            
+            System.out.println("Clicked: " + "X= " + clickedX + ", Y=" + clickedY);
+
+            double patchSize = (500/dqip.getQuiltSize());
+
+            int patchX = (int) (Math.ceil(clickedX/patchSize));
+            int patchY = (int) (Math.ceil(clickedY/(patchSize)));
+
+            int squareX = (int) (Math.ceil((Math.abs((patchX - 1)-((clickedX)/patchSize)))* 2));
+            int squareY = (int) (Math.ceil((Math.abs((patchY - 1)-((clickedY)/patchSize)))* 2));
+
+            System.out.println("Patch Coords: " + "X:" + patchX + " Y:" + patchY);
+            System.out.println("Square within Patch Coords: " + "X:" + squareX + " Y:" + squareY);
+
     }
 }
