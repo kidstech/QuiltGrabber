@@ -93,6 +93,22 @@ public class QuiltBlockPreview {
         quiltGrabPane.setOnMouseEntered(e -> { quiltGrabCursor.setVisible(true); previewCursor.setVisible(true); });
         previewPane.setOnMouseEntered(e -> { quiltGrabCursor.setVisible(true); previewCursor.setVisible(true); });
 
+        quiltGrabPane.setOnMouseClicked((MouseEvent click) -> {
+            // Get the X and Y coordinates relative to the Pane
+            double x = click.getX();
+            double y = click.getY();
+            
+            System.out.println("QuiltGrab Pane: " + "X= " + x + ", Y=" + y);
+        });
+
+        previewPane.setOnMouseClicked((MouseEvent click) -> {
+            // Get the X and Y coordinates relative to the Pane
+            double x = click.getX();
+            double y = click.getY();
+            
+            System.out.println("Preview Pane: " + "X= " + x + ", Y=" + y);
+        });
+
         Label blockNameLabel = new Label("Block Name:");
         TextField quiltBlockName = new TextField();
 
