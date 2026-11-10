@@ -185,7 +185,6 @@ public class DQTranslateXML {
         for (int i = doubledQuiltSize - 2; i >= 0; i-= 2) {
             for (int j = 0; j < doubledQuiltSize; j+= 2) {
                 buildPatches.append("        <Patch>\n");
-                // 4 patches to one block
 
                 // rows and columns WITHIN the patch itself
                 for (int row = 1; row >= 0; row--) {
