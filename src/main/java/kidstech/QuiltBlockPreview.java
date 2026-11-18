@@ -162,21 +162,41 @@ public class QuiltBlockPreview {
     }
 
     private void getClickCoords (MouseEvent e, Pane pane) {
-            double clickedX = e.getX();
-            double clickedY = e.getY();
+        double clickedX = e.getX();
+        double clickedY = e.getY();
             
-            System.out.println("Clicked: " + "X= " + (clickedX - 1) + ", Y=" + (clickedY - 1));
+        System.out.println("Clicked: " + "X= " + (clickedX - 1) + ", Y=" + (clickedY - 1));
 
-            double patchSize = (500/dqip.getQuiltSize());
+        double patchSize = (500/dqip.getQuiltSize());
+        double squareSize = (patchSize / 2);
 
-            int patchX = (int) (Math.ceil(clickedX/patchSize));
-            int patchY = (int) (Math.ceil(clickedY/(patchSize)));
+        int patchX = (int) (Math.ceil(clickedX/patchSize));
+        int patchY = (int) (Math.ceil(clickedY/patchSize));
 
-            int squareX = (int) (Math.ceil((Math.abs((patchX - 1)-((clickedX)/patchSize)))* 2));
-            int squareY = (int) (Math.ceil((Math.abs((patchY - 1)-((clickedY)/patchSize)))* 2));
+        int squareX = (int) (Math.ceil((Math.abs((patchX - 1)-((clickedX)/patchSize)))* 2));
+        int squareY = (int) (Math.ceil((Math.abs((patchY - 1)-((clickedY)/patchSize)))* 2));
 
-            System.out.println("Patch Coords: " + "X:" + (patchX - 1) + " Y:" + (patchY - 1));
-            System.out.println("Square within Patch Coords: " + "X:" + (squareX - 1) + " Y:" + (squareY - 1));
+        System.out.println("Patch Coords: " + "X:" + (patchX - 1) + " Y:" + (patchY - 1));
+        System.out.println("Square within Patch Coords: " + "X:" + (squareX - 1) + " Y:" + (squareY - 1));
 
+        double squareStartX = ((patchX - 1) * patchSize) + ((squareX - 1) * squareSize);
+        double squareStartY = ((patchY - 1) * patchSize) + ((squareY - 1) * squareSize);
+
+        double triX = clickedX - (squareStartX + squareSize / 2);
+        double triY = clickedY - (squareStartY + squareSize / 2);
+
+        String triangle = "";
+
+        if ((-triX >= triY) && (triX >= triY) ) {
+            triangle = "Top";
+        } else if ((-triX >= triY)  && (triX <= triY)) {
+            triangle = "Left";
+        } else if ((-triX <= triY) && (triX >= triY)) {
+            triangle = "Right";
+        } else {
+            triangle = "Bottom";
+        }
+
+        System.out.println("Selected Triangle: " + triangle + " Triangle");
     }
 }
