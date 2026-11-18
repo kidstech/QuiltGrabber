@@ -184,8 +184,11 @@ public class DQTranslateXML {
 
         for (int i = doubledQuiltSize - 2; i >= 0; i-= 2) {
             for (int j = 0; j < doubledQuiltSize; j+= 2) {
-                buildPatches.append("        <Patch>\n");
+                int over = (j / 2);
+                int down = ((doubledQuiltSize - 2 - i) / 2);
+                buildPatches.append(String.format("        <Patch over=\"%s\" down=\"%s\">\n", over, down));
 
+                int triCount = 1;
                 // rows and columns WITHIN the patch itself
                 for (int row = 1; row >= 0; row--) {
                     for (int col = 0; col < 2; col++) {
@@ -214,10 +217,14 @@ public class DQTranslateXML {
                         String triangle3 = samplePatch(image, topRight, bottomRight, center);
                         String triangle4 = samplePatch(image, bottomLeft, bottomRight, center);
 
-                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle1));
-                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle2));
-                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle3));
-                        buildPatches.append(String.format("            <Fabric>%s</Fabric>\n", triangle4));
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle1, triCount));
+                        triCount= triCount + 1;
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle2, triCount));
+                        triCount= triCount + 1;
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle3, triCount));
+                        triCount= triCount + 1;
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle4, triCount));
+                        triCount= triCount + 1;
                     }
                 }
             buildPatches.append("        </Patch>\n");
