@@ -212,18 +212,18 @@ public class DQTranslateXML {
                         Point center = new Point(centerCoords[0], centerCoords[1]);
 
                         // locating the triangles within each patch at their proper numbering position
-                        String triangle1 = samplePatch(image, topLeft, topRight, center);
-                        String triangle2 = samplePatch(image, topLeft, bottomLeft, center);
-                        String triangle3 = samplePatch(image, topRight, bottomRight, center);
-                        String triangle4 = samplePatch(image, bottomLeft, bottomRight, center);
+                        String topTri = samplePatch(image, topLeft, topRight, center);
+                        String leftTri = samplePatch(image, topLeft, bottomLeft, center);
+                        String rightTri = samplePatch(image, topRight, bottomRight, center);
+                        String botTri = samplePatch(image, bottomLeft, bottomRight, center);
 
-                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle1, triCount));
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, topTri, triCount));
                         triCount= triCount + 1;
-                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle2, triCount));
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, leftTri, triCount));
                         triCount= triCount + 1;
-                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle3, triCount));
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, rightTri, triCount));
                         triCount= triCount + 1;
-                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, triangle4, triCount));
+                        buildPatches.append(String.format("            <Triangle%s>%s</Triangle%s>\n", triCount, botTri, triCount));
                         triCount= triCount + 1;
                     }
                 }
