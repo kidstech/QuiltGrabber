@@ -170,33 +170,42 @@ public class QuiltBlockPreview {
         double patchSize = (500/dqip.getQuiltSize());
         double squareSize = (patchSize / 2);
 
-        int patchX = (int) (Math.ceil(clickedX/patchSize));
-        int patchY = (int) (Math.ceil(clickedY/patchSize));
+        int patchX = (int) (clickedX/patchSize);
+        int patchY = (int) (clickedY/patchSize);
 
-        int squareX = (int) (Math.ceil((Math.abs((patchX - 1)-((clickedX)/patchSize)))* 2));
-        int squareY = (int) (Math.ceil((Math.abs((patchY - 1)-((clickedY)/patchSize)))* 2));
+        int squareX = (int) ((clickedX - (patchX * patchSize)) / squareSize);
+        int squareY = (int) ((clickedY - (patchY * patchSize)) / squareSize);
 
-        System.out.println("Patch Coords: " + "X:" + (patchX - 1) + " Y:" + (patchY - 1));
-        System.out.println("Square within Patch Coords: " + "X:" + (squareX - 1) + " Y:" + (squareY - 1));
+        System.out.println("Patch Coords: " + "X:" + (patchX) + " Y:" + (patchY));
+        System.out.println("Square within Patch Coords: " + "X:" + (squareX) + " Y:" + (squareY));
 
-        double squareStartX = ((patchX - 1) * patchSize) + ((squareX - 1) * squareSize);
-        double squareStartY = ((patchY - 1) * patchSize) + ((squareY - 1) * squareSize);
+        double squareStartX = ((patchX) * patchSize) + ((squareX) * squareSize);
+        double squareStartY = ((patchY) * patchSize) + ((squareY) * squareSize);
 
         double triX = clickedX - (squareStartX + squareSize / 2);
         double triY = clickedY - (squareStartY + squareSize / 2);
 
-        String triangle = "";
+        String triangleOrientation;
+        int baseTriangle;
+        int triangleNumber;
 
-        if ((-triX >= triY) && (triX >= triY) ) {
-            triangle = "Top";
+        if ((-triX >= triY) && (triX >= triY)  ) {
+            triangleOrientation = "Top";
+            baseTriangle = 1;
         } else if ((-triX >= triY)  && (triX <= triY)) {
-            triangle = "Left";
+            triangleOrientation = "Left";
+            baseTriangle = 2;
         } else if ((-triX <= triY) && (triX >= triY)) {
-            triangle = "Right";
+            triangleOrientation = "Right";
+            baseTriangle = 3;
         } else {
-            triangle = "Bottom";
+            triangleOrientation = "Bottom";
+            baseTriangle = 4;
         }
 
-        System.out.println("Selected Triangle: " + triangle + " Triangle");
+        triangleNumber = (squareY * 8) + (squareX * 4) + baseTriangle;
+
+        System.out.println("Triangle Orientation: " + triangleOrientation);
+        System.out.println("Triangle Number: " + "Triangle " + triangleNumber);
     }
 }
