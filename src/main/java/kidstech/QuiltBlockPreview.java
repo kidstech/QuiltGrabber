@@ -165,7 +165,7 @@ public class QuiltBlockPreview {
             double clickedX = e.getX();
             double clickedY = e.getY();
             
-            System.out.println("Clicked: " + "X= " + clickedX + ", Y=" + clickedY);
+            System.out.println("Clicked: " + "X= " + (clickedX - 1) + ", Y=" + (clickedY - 1));
 
             double patchSize = (500/dqip.getQuiltSize());
 
@@ -175,8 +175,8 @@ public class QuiltBlockPreview {
             int squareX = (int) (Math.ceil((Math.abs((patchX - 1)-((clickedX)/patchSize)))* 2));
             int squareY = (int) (Math.ceil((Math.abs((patchY - 1)-((clickedY)/patchSize)))* 2));
 
-            System.out.println("Patch Coords: " + "X:" + patchX + " Y:" + patchY);
-            System.out.println("Square within Patch Coords: " + "X:" + squareX + " Y:" + squareY);
+            System.out.println("Patch Coords: " + "X:" + (patchX - 1) + " Y:" + (patchY - 1));
+            System.out.println("Square within Patch Coords: " + "X:" + (squareX - 1) + " Y:" + (squareY - 1));
 
     }
 }
