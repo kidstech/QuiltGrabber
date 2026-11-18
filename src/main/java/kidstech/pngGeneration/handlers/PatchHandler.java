@@ -13,6 +13,8 @@ import kidstech.quiltObjects.Patch;
 // referenced from DigiQuilt
 public class PatchHandler extends DelegatingHandler {
 
+private int currentTriangleIndex = 0;
+
     /**
      * String array of the fabrics as we load them.
      */
@@ -37,8 +39,9 @@ public class PatchHandler extends DelegatingHandler {
     @Override
     public void startElement(String uri, String localName, String name,
             Attributes attributes) throws SAXException {
-        if (name.equals("Fabric")){
-            TextHandler fabricHandler = new TextHandler(this, "Fabric");
+        if (name.startsWith("Triangle")){
+            currentTriangleIndex = Integer.parseInt(name.substring("Triangle".length())) - 1;
+            TextHandler fabricHandler = new TextHandler(this, name);
             fabricHandler.startHandlingEvents();
         }
     }
